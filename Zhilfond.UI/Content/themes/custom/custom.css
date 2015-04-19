@@ -1,0 +1,192 @@
+.custom {
+    font-family: Verdana;
+}
+
+.custom h6{
+    font-family:Verdana;
+    font-size: 0.9em;
+}
+
+.custom input {
+	font-size: 0.8em;
+	font-family: Verdana;
+	float: left;
+    border: none;
+    width: 250px;
+    clear: both;
+}
+.custom input[type=button]{
+  	font-size: 0.8em;
+	font-family: Verdana;
+	font-weight: normal;
+    width:auto;
+}
+.custom label{
+  	font-size: 0.8em;
+	font-family: Verdana;
+	font-weight: normal;
+	width:290px;
+	clear:both;
+}
+
+/* main layout
+----------------------------------------------------------*/
+.content-wrapper {
+    margin: auto;
+    max-width: 1250px;
+}
+
+#body {
+    background-color: #efeeef;
+    clear: both;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading {
+    overflow: hidden;   
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal {
+    display: block;
+}
+
+    .main-content {
+        padding: 0.5px 0px 0px 15px; //1280x1024 optimization
+    }
+
+    .featured + .main-content {
+        background: url("../Images/heroAccent.png") no-repeat;
+    }
+
+header .content-wrapper {
+    padding: 20px 0px 0px 15px; //1280x1024 optimization
+}
+
+footer {
+    clear: both;
+    background-color: #e2e2e2;
+    font-size: .8em;
+    height: 30px;
+    //padding: 0 15px;
+    //max-width: 1280px;
+}
+
+footer .content-wrapper {
+    padding: 0px 0px 0px 15px;
+}
+
+
+
+
+/* site title
+----------------------------------------------------------*/
+.site-title {
+    color: #c8c8c8;
+    font-family: Verdana;
+    font-size: 2.0em;
+    margin: 0;
+}
+
+.site-title a, .site-title a:hover, .site-title a:active {
+    background: none;
+    color: #c8c8c8;
+    outline: none;
+    text-decoration: none;
+}
+
+
+/* Start by setting display:none to make this hidden.
+   Then we position it in relation to the viewport window
+   with position:fixed. Width, height, top and left speak
+   speak for themselves. Background we set to 80% white with
+   our animation centered, and no-repeating */
+.modal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .3 ) 
+                url("./images/wait.gif") 
+                50% 50% 
+                no-repeat;
+}
+/* Main form*/
+#mainForm
+{
+
+}
+
+.div_total
+{
+    width: 100%;
+    /*height: 750px;*/
+    border: 0px solid lightgray;
+    float:left;
+}
+.div_top
+{
+    width: auto;
+    /*height: 200px;*/
+    border: 0px solid #ccc;
+    border-bottom: 0px;
+}
+
+.div_bottom
+{
+    width: auto;
+    max-width: 1245px;
+ /*   height: 530px; */
+    border: 2px solid #ccc;    
+    float:none;
+}
+
+
+.div_left
+{
+    width: 20%;
+    height: 100%;
+    border-right: 2px solid #ccc;    
+}
+
+.div_right
+{
+   width: 80%;
+   height: 100%;    
+   float:right;
+}
+
+.div_right
+{
+    width: 80%;
+    height: 100%;    
+   float:right;
+}
+
+.div_title_details, .div_title_attach
+{
+   font-family: Verdana;
+   font-size: 12px;
+   font-weight: bolder;
+   vertical-align: middle;
+   height: 25px;
+}
+
+
+
+.div_title_subdetails
+{
+   font-family: Verdana;
+   font-size: 0.9em;
+   font-weight: bolder;
+   vertical-align: middle;
+   height: 25px;
+}
+
+
+

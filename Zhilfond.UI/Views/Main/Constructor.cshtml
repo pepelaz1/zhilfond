@@ -1,0 +1,703 @@
+﻿@{
+    ViewBag.Title = "Жилфонд";
+}
+
+<div id="title">
+    <h3>Конструктор форм</h3>
+</div>
+<div id="login_info">
+    <p>Текущий пользователь: <span></span></p>
+</div>
+<div id="total" class="div_total">
+    <table style="margin-top: 0.25em;">
+        <tr>
+            <td>
+                <table id="grid_forms"></table>
+                <div id="pager_forms"></div>
+            </td>
+            <td style="padding-right: 0">
+                <table id="grid_fields"></table>
+                <div id="pager_fields"></div>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <table id="grid_rules"></table>
+                <div id="pager_rules"></div>
+                <br />
+                <table id="grid_formulas"></table>
+                <div id="pager_formulas"></div>
+            </td>
+            <td style="padding-right: 0">
+                <table id="grid_categories"></table>
+                <div id="pager_categories"></div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+@Styles.Render("~/Content/themes/base/css", "~/Content/css")
+
+<link href="~/Content/themes/custom/custom.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/jquery.jqGrid/ui.jqgrid.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/themes/base/jquery.ui.menu.css" rel="stylesheet" type="text/css" />
+@*Treeview Style*@
+<link rel="stylesheet" href="~/Scripts/treeview/jquery.treeview.css">
+@*END Treeview Style*@
+
+@section scripts {
+
+
+    <script src="~/Scripts/jquery-1.9.1.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery-ui-1.10.3.js" type="text/javascript"></script>
+    <script src="~/Scripts/i18n/grid.locale-en.js" type="text/javascript"></script>
+    <script src="~/Scripts/carhartl/jquery.cookie.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.jqGrid.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/global.js" type="text/javascript"></script>
+    @*Treeview scripts
+    <script src="~/Scripts/treeview/jquery.treeview.async.js" type="text/javascript"></script>
+    <script src="~/Scripts/treeview/jquery.treeview.edit.js" type="text/javascript"></script>*@
+    <script src="~/Scripts/treeview/jquery.treeview.js" type="text/javascript"></script>
+    @*<script src="~/Scripts/treeview/jquery.treeview.sortable.js" type="text/javascript"></script>
+    END Treeview scripts*@
+
+    <script>
+
+
+        $().ready(function () {
+
+            showTopMenu();
+            $("#login_info p span").html(getUser($.cookie('token')));
+
+        });
+
+        // Forms grid
+        var api_forms = '/api/formsapi/';
+
+        // region
+        $("#grid_forms").jqGrid({
+            url: api_forms,
+            datatype: 'json',
+            mtype: 'GET',
+            pager: '#pager_forms',
+            pagerpos: 'center',
+            sortable: false,
+            height: 250,
+            width: 400,
+            viewrecords: true,
+            rowNum: 10000,
+            colNames: ['ИД', 'Порядок', 'Название'],
+            colModel: [{ name: 'Id', index: 'Id', editable: false, width: 10, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'Order', index: 'Order', editable: true, width: 25, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'Title', index: 'Title', editable: true, edittype: 'text', width: 120, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+            ],
+            caption: "Список настраиваемых форм",
+            onSelectRow: function (ids) {
+                var rowData = $("#grid_forms").getRowData(ids);
+                $("#grid_fields").jqGrid('setCaption', "Поля формы: " + rowData.Title);
+                $("#grid_fields").jqGrid('setGridParam', { url: api_fields + "?id_form=" + rowData.Id }).trigger('reloadGrid');
+
+                $("#grid_rules").jqGrid('setCaption', "Правила для полей");
+                $("#grid_rules").jqGrid('setGridParam', { url: api_rules + "?id_field=undefined" }).trigger('reloadGrid');
+
+                $("#grid_formulas").jqGrid('setCaption', "Формулы для полей");
+                $("#grid_formulas").jqGrid('setGridParam', { url: api_formulas + "?id_field=undefined" }).trigger('reloadGrid');
+            },
+            //     autowidth: true,
+            loadError: function (xhr, st, err) {
+                if (xhr.status == 401) {
+                    //window.location.replace("/Home/Index");
+                    alert(xhr);
+                }
+            },
+            loadComplete: function (data) {
+                $('#grid_forms').jqGrid('setSelection', 1);
+                var rowData = $("#grid_forms").getRowData(1);
+                $("#grid_fields").jqGrid('setGridParam', { url: api_fields + "?id_form=" + rowData.Id }).trigger('reloadGrid');
+            }
+        });
+
+        function updateDialog_forms(action) {
+            return {
+                url: api_forms
+                    , closeAfterAdd: true
+                    , closeAfterEdit: true
+                    , afterShowForm: function (formId) { }
+                    , modal: true
+                    , onclickSubmit: function (params) {
+                        var list = $("#grid_forms");
+                        var selectedRow = list.getGridParam("selrow");
+                        rowData = list.getRowData(selectedRow);
+                        params.url += rowData.Id;
+                        params.mtype = action;
+                    }
+                    , width: "500"
+            };
+        }
+
+        $("#grid_forms").jqGrid('navGrid', '#pager_forms',
+            { add: true, edit: true, del: true, refresh: true, search: false },
+             updateDialog_forms('PUT'),
+             updateDialog_forms('POST'),
+             updateDialog_forms('DELETE'),
+             {
+                 onReset: function () {
+                     var jqModal = true, gridid = grid[0].id;
+                     $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                    { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                 },
+                 onSearch: function () {
+                     var jqModal = true, gridid = grid[0].id;
+                     $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                 { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                 }
+             }
+         );
+        $("#pager_forms").find("#pager_forms_center").hide();
+
+        $("#grid_forms").jqGrid('navGrid', '#pager_forms', {}, {}, {}, {},
+        {
+            onReset: function () {
+                var jqModal = true, gridid = grid[0].id;
+                $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                    { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+            }
+        });
+
+
+        // Fields grid
+        var api_fields = '/api/fieldsapi/';
+
+        $("#grid_fields").jqGrid({
+            url: api_fields,
+            datatype: 'json',
+            mtype: 'GET',
+            pager: '#pager_fields',
+            pagerpos: 'center',
+            sortable: true,
+            height: 250,
+            width: 830,
+            viewrecords: true,
+            rowNum: 10000,
+            colNames: ['ИД', 'Название', 'Порядок', 'Тип', 'Категория', 'Обязательное', 'ПДН'],
+            colModel: [{ name: 'Id', index: 'Id', editable: false, width: 12, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'Title', index: 'Title', editable: true, edittype: 'text', width: 120, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'Order', index: 'Order', editable: true, width: 35, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       {
+                           name: 'Id_dict', index: 'Id_dict', editable: true, edittype: 'select', width: 80, editrules: { required: true }, searchoptions: { sopt: ['cn'] },
+                           editoptions: {
+                               dataUrl: '/api/dictsapi/',
+                               buildSelect: function (data) {
+                                   var response = jQuery.parseJSON(data);
+                                   var s = '<select>';
+                                   if (response && response.length) {
+                                       for (var i = 0, l = response.length; i < l ; i++) {
+                                           var r = response[i];
+                                           s += '<option value="' + r["Id"] + '">' + r["Title"] + '</option>';
+                                       }
+                                   }
+                                   return s + "</select>";
+                               },
+                               style: "width: 200px"
+                           }
+                       },
+                       {
+                           name: 'Id_category', index: 'Id_category', editable: true, edittype: 'select', width: 120, editrules: { required: true }, searchoptions: { sopt: ['cn'] },
+                           editoptions: {
+                               dataUrl: '/api/categoriesapi/?type=plain',
+                               buildSelect: function (data) {
+                                   var response = jQuery.parseJSON(data);
+                                   var s = '<select>';
+                                   if (response && response.length) {
+                                       for (var i = 0, l = response.length; i < l ; i++) {
+                                           var r = response[i];
+                                           s += '<option value="' + r["Id"] + '">' + r["Title"] + '</option>';
+                                       }
+                                   }
+                                   return s + "</select>";
+                               },
+                               style: "width: 200px"
+                           }
+                       },
+                       { name: 'Required', index: 'Required', editable: true, edittype: 'checkbox', width: 60, editrules: { required: true }, searchoptions: { sopt: ['cn'] }, formatter: 'checkbox' },
+                       { name: 'Personal', index: 'Personal', editable: true, edittype: 'checkbox', width: 30, editrules: { required: true }, searchoptions: { sopt: ['cn'] }, formatter: 'checkbox' },
+            ],
+            caption: "Поля формы",
+            //   autowidth: true,
+            loadError: function (xhr, st, err) {
+                if (xhr.status == 401) {
+                    //window.location.replace("/Home/Index");
+                    alert(xhr);
+                }
+            },
+            onSelectRow: function (ids) {
+                var rowData = $("#grid_fields").getRowData(ids);
+                $("#grid_rules").jqGrid('setCaption', "Правила для поля: " + rowData.Title);
+                $("#grid_rules").jqGrid('setGridParam', { url: api_rules + "?id_field=" + rowData.Id }).trigger('reloadGrid');
+
+                $("#grid_formulas").jqGrid('setCaption', "Формулы для поля: " + rowData.Title);
+                $("#grid_formulas").jqGrid('setGridParam', { url: api_formulas + "?id_field=" + rowData.Id }).trigger('reloadGrid');
+
+                //$("#grid_fields").jqGrid('setGridParam', { url: api_fields +"?id_form=" + rowData.Id }).trigger('reloadGrid');
+            }
+        });
+
+        function updateDialog_fields(action) {
+            return {
+                url: api_fields
+                    , closeAfterAdd: true
+                    , closeAfterEdit: true
+                    , afterShowForm: function (formId) { }
+                    , modal: true
+                    , onclickSubmit: function (params) {
+                        var gforms = $("#grid_forms");
+                        var formsrow = gforms.getGridParam("selrow");
+                        var formsrowData = gforms.getRowData(formsrow);
+
+                        var gfields = $("#grid_fields");
+                        var fieldsrow = gfields.getGridParam("selrow");
+                        var fieldsrowData = gfields.getRowData(fieldsrow);
+
+                        params.url += fieldsrowData.Id + "?id_form=" + formsrowData.Id;
+                        params.mtype = action;
+                    }
+                    , width: "500"
+            };
+        }
+
+        $("#grid_fields").jqGrid('navGrid', '#pager_fields',
+           { add: true, edit: true, del: true, refresh: true, search: false },
+            updateDialog_fields('PUT'),
+            updateDialog_fields('POST'),
+            updateDialog_fields('DELETE'),
+            {
+                onReset: function () {
+                    var jqModal = true, gridid = grid[0].id;
+                    $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                   { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                },
+                onSearch: function () {
+                    var jqModal = true, gridid = grid[0].id;
+                    $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                }
+            }
+        );
+        $("#pager_fields").find("#pager_fields_center").hide();
+
+        // Rules grid
+        var api_rules = '/api/rulesapi/';
+
+        $("#grid_rules").jqGrid({
+            url: api_rules,
+            datatype: 'json',
+            mtype: 'GET',
+            pager: '#pager_rules',
+            pagerpos: 'center',
+            sortable: false,
+            height: 85,
+            width: 855,
+            viewrecords: true,
+            rowNum: 10000,
+            colNames: ['ИД', 'Название', 'Операция', 'Предикат'],
+            colModel: [{ name: 'Id', index: 'Id', editable: false, width: 10, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'Title', index: 'Title', editable: true, edittype: 'text', width: 40, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       {
+                           name: 'Id_operation', index: 'Id_operation', editable: true, edittype: 'select', width: 12, editrules: { required: true }, searchoptions: { sopt: ['cn'] },
+                           editoptions: {
+                               dataUrl: '/api/operationsapi/',
+                               buildSelect: function (data) {
+                                   var response = jQuery.parseJSON(data);
+                                   var s = '<select>';
+                                   if (response && response.length) {
+                                       for (var i = 0, l = response.length; i < l ; i++) {
+                                           var r = response[i];
+                                           s += '<option value="' + r["Id"] + '">' + r["Operation"] + '</option>';
+                                       }
+                                   }
+                                   return s + "</select>";
+                               },
+                               style: "width: 200px"
+                           }
+                       },
+                       {
+                           name: 'Predicate', index: 'Predicate', editable: true, edittype: 'custom', width: 92, editrules: { required: true }, searchoptions: { sopt: ['cn'] },
+                           editoptions: {
+                               custom_element: function (value, options) {
+
+                                   var newDiv = document.createElement('div');
+                                   newDiv.className = 'dvConstructor';
+                                   newDiv.id = 'dvConstructor';
+
+                                   var myElem = "";
+                                   myElem += "<table cellpadding='4'><tbody><tr><th>Подстановки</th><th>Предикат</th></tr><tr><td style='width: auto;'>";
+                                   var tree = "";
+
+                                   $.ajax(
+                                   {
+                                       type: 'GET',
+                                       async: false,
+                                       url: '/api/formsapi/?token=' + $.cookie('token'),
+                                       success: function (formdata) {
+                                           tree += "<ul id='red'>";
+                                           formdata.rows.forEach(function (formentry) {
+                                               tree += "<li><div></div><span>" + formentry.Title + "</span>";
+
+                                               $.ajax(
+                                                {
+                                                    type: 'GET',
+                                                    async: false,
+                                                    url: '/api/fieldsapi/?id_form=' + formentry.Id,
+                                                    success: function (fielddata) {
+                                                        console.log(fielddata);
+                                                        tree += "<ul id='form" + formentry.Id + "'>";
+                                                        fielddata.rows.forEach(function (fieldentry) {
+                                                            console.log(fieldentry.Title);
+                                                            tree += "<li><div></div><a href='#' alt='[" + formentry.Title + "].[" + fieldentry.cell[1] + "]'>" + fieldentry.cell[1] + "</a></li>";
+                                                        });
+                                                        tree += "</ul>";
+                                                    },
+                                                    error: function (x, e) {
+                                                    }
+                                                });
+
+                                               tree += "</li>"
+                                               tree += "</ul>";
+                                           });
+                                       },
+                                       error: function (x, e) {
+                                       }
+                                   });
+
+                                   myElem += tree + "</td>";
+
+                                   myElem += "<td nowrap='nowrap' style='text-align: left; vertical-align: top;'><div><textarea id='formulaval' class='ui-widget-content' style='min-width:447px; width: 100%; min-height: 260px; height: 100%; display: block;'>" + value + "</textarea></div></td>";
+                                   //myElem += "<td nowrap='nowrap' style='text-align: left; vertical-align: top;'><div><input type='text' id='formulaval' class='ui-widget-content' style='min-width:447px; width: 100%; min-height: 260px; height: 100%; display: block;' value='" + value + "' /></div></td>";
+                                   myElem += "</tr></tbody></table>";
+                                   
+                                   newDiv.innerHTML = myElem;
+
+                                   /// патаемся сделать дерево 
+                                   $(newDiv).treeview({
+                                       persist: "location",
+                                       collapsed: true,
+                                       unique: true
+                                   });
+
+                                   $('li > a', newDiv).bind('click', function () {
+                                       //$('textarea', newDiv).val($(this).attr('alt'));
+                                       //$('textarea', newDiv).append($(this).attr('alt'));
+                                       var oldval = $('textarea', newDiv).val();
+                                       $('textarea', newDiv).val(oldval + $(this).attr('alt'));
+                                   });
+
+                                   return newDiv;
+                               },
+                               custom_value: function (elem, operation, value) {
+                                   if (operation === 'get') {
+                                       return $('textarea', elem).val();
+                                   } else if (operation === 'set') {
+                                       $('textarea', elem).val(value);
+                                   }
+
+                               }
+                           },
+                           style: "width: 500px"
+                       }
+            ],
+            caption: "Правила для полей",
+            //   autowidth: true,
+            loadError: function (xhr, st, err) {
+                if (xhr.status == 401) {
+                    //window.location.replace("/Home/Index");
+                    alert(xhr);
+                }
+            }
+        });
+
+        function updateDialog_rules(action) {
+            return {
+                url: api_rules
+                    , closeAfterAdd: true
+                    , closeAfterEdit: true
+                    , afterShowForm: function (formId) { }
+                    , modal: true
+                    , onclickSubmit: function (params) {
+                        var gfields = $("#grid_fields");
+                        var fieldsrow = gfields.getGridParam("selrow");
+                        var fieldsrowData = gfields.getRowData(fieldsrow);
+
+                        var grules = $("#grid_rules");
+                        var rulesrow = grules.getGridParam("selrow");
+                        var rulesrowData = grules.getRowData(rulesrow);
+
+                        params.url += rulesrowData.Id + "?id_field=" + fieldsrowData.Id;
+                        params.mtype = action;
+                    }
+                    , width: "800"
+            };
+        }
+
+        $("#grid_rules").jqGrid('navGrid', '#pager_rules',
+           { add: true, edit: true, del: true, refresh: true, search: false },
+            updateDialog_rules('PUT'),
+            updateDialog_rules('POST'),
+            updateDialog_rules('DELETE'),
+            {
+                onReset: function () {
+                    var jqModal = true, gridid = grid[0].id;
+                    $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                   { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                },
+                onSearch: function () {
+                    var jqModal = true, gridid = grid[0].id;
+                    $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                }
+            }
+        );
+
+        $("#pager_rules").find("#pager_rules_center").hide();
+
+
+        // Formulas grid
+        var api_formulas = '/api/formulasapi/';
+
+        $("#grid_formulas").jqGrid({
+            url: api_formulas,
+            datatype: 'json',
+            mtype: 'GET',
+            pager: '#pager_formulas',
+            pagerpos: 'center',
+            sortable: false,
+            height: 85,
+            //  width: 1270,
+            width: 855,
+            viewrecords: true,
+            rowNum: 10000,
+            colNames: ['ИД', 'Название', 'Предикат'],
+            colModel: [{ name: 'Id', index: 'Id', editable: false, width: 10, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'Title', index: 'Title', editable: true, edittype: 'text', width: 40, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       {
+                           name: 'Predicate', index: 'Predicate', editable: true, edittype: 'custom', width: 92, editrules: { required: true }, searchoptions: { sopt: ['cn'] },
+                           editoptions: {
+                               custom_element: function (value, options) {
+
+                                   var newDiv = document.createElement('div');
+                                   newDiv.className = 'dvConstructor';
+                                   newDiv.id = 'dvConstructor';
+
+                                   var myElem = "";
+                                   myElem += "<table cellpadding='4'><tbody><tr><th>Подстановки</th><th>Предикат</th></tr><tr><td style='width: auto;'>";
+                                   var tree = "";
+
+                                   $.ajax(
+                                   {
+                                       type: 'GET',
+                                       async: false,
+                                       url: '/api/formsapi/?token=' + $.cookie('token'),
+                                       success: function (formdata) {
+                                           tree += "<ul id='red'>";
+                                           formdata.rows.forEach(function (formentry) {
+                                               tree += "<li><div></div><span>" + formentry.Title + "</span>";
+
+                                               $.ajax(
+                                                {
+                                                    type: 'GET',
+                                                    async: false,
+                                                    url: '/api/fieldsapi/?id_form=' + formentry.Id,
+                                                    success: function (fielddata) {
+                                                        console.log(fielddata);
+                                                        tree += "<ul id='form" + formentry.Id + "'>";
+                                                        fielddata.rows.forEach(function (fieldentry) {
+                                                            console.log(fieldentry.Title);
+                                                            tree += "<li><div></div><a href='#' alt='[" + formentry.Title + "].[" + fieldentry.cell[1] + "]'>" + fieldentry.cell[1] + "</a></li>";
+                                                        });
+                                                        tree += "</ul>";
+                                                    },
+                                                    error: function (x, e) {
+                                                    }
+                                                });
+
+                                               tree += "</li>"
+                                               tree += "</ul>";
+                                           });
+                                       },
+                                       error: function (x, e) {
+                                       }
+                                   });
+
+                                   myElem += tree + "</td>";
+
+                                   myElem += "<td nowrap='nowrap' style='text-align: left; vertical-align: top;'><div><textarea id='formulaval' class='ui-widget-content' style='min-width:447px; width: 100%; min-height: 260px; height: 100%; display: block;'>" + value + "</textarea></div></td>";
+                                   //myElem += "<td nowrap='nowrap' style='text-align: left; vertical-align: top;'><div><input type='text' id='formulaval' class='ui-widget-content' style='min-width:447px; width: 100%; min-height: 260px; height: 100%; display: block;' value='" + value + "' /></div></td>";
+
+                                   myElem += "</tr></tbody></table>";
+
+                                   newDiv.innerHTML = myElem;
+
+
+                                   /// патаемся сделать дерево 
+                                   $(newDiv).treeview({
+                                       persist: "location",
+                                       collapsed: true,
+                                       unique: true
+                                   });
+
+                                   $('li > a', newDiv).bind('click', function () {
+                                       //$('textarea', newDiv).val($(this).attr('alt'));
+                                       //$('textarea', newDiv).append($(this).attr('alt'));
+                                       var oldval = $('textarea', newDiv).val();
+                                       $('textarea', newDiv).val(oldval + $(this).attr('alt'));
+                                   });
+
+                                   return newDiv;
+                               },
+                               custom_value: function (elem, operation, value) {
+                                   if (operation === 'get') {
+                                       return $('textarea', elem).val();
+                                   } else if (operation === 'set') {
+                                       $('textarea', elem).val(value);
+                                   }
+
+                               }
+                           },
+                           style: "width: 500px"
+                       }
+            ],
+            caption: "Формулы для полей",
+            //   autowidth: true,
+            loadError: function (xhr, st, err) {
+                if (xhr.status == 401) {
+                    //window.location.replace("/Home/Index");
+                    alert(xhr);
+                }
+            }
+        });
+
+        function updateDialog_formulas(action) {
+            return {
+                url: api_formulas
+                    , closeAfterAdd: true
+                    , closeAfterEdit: true
+                    , afterShowForm: function (formId) { }
+                    , modal: true
+                    , onclickSubmit: function (params) {
+                        var gfields = $("#grid_fields");
+                        var fieldsrow = gfields.getGridParam("selrow");
+                        var fieldsrowData = gfields.getRowData(fieldsrow);
+
+                        var gformulas = $("#grid_formulas");
+                        var formulasrow = gformulas.getGridParam("selrow");
+                        var formulasrowData = gformulas.getRowData(formulasrow);
+
+                        params.url += formulasrowData.Id + "?id_field=" + fieldsrowData.Id;
+                        params.mtype = action;
+                    }
+                    , width: "800"
+            };
+        }
+
+        $("#grid_formulas").jqGrid('navGrid', '#pager_formulas',
+           { add: true, edit: true, del: true, refresh: true, search: false },
+            updateDialog_formulas('PUT'),
+            updateDialog_formulas('POST'),
+            updateDialog_formulas('DELETE'),
+            {
+                onReset: function () {
+                    var jqModal = true, gridid = grid[0].id;
+                    $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                   { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                },
+                onSearch: function () {
+                    var jqModal = true, gridid = grid[0].id;
+                    $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                }
+            }
+        );
+
+        $("#pager_formulas").find("#pager_formulas_center").hide();
+
+
+        // Categories grid
+        var api_categories = '/api/categoriesapi/';
+
+        // region
+        $("#grid_categories").jqGrid({
+            url: api_categories,
+            datatype: 'json',
+            mtype: 'GET',
+            pager: '#pager_categories',
+            pagerpos: 'center',
+            sortable: false,
+            height: 262,
+            width: 375,
+            viewrecords: true,
+            rowNum: 10000,
+            colNames: ['ИД', 'Порядок', 'Название'],
+            colModel: [{ name: 'Id', index: 'Id', editable: false, width: 10, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'Order', index: 'Order', editable: true, width: 25, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'Title', index: 'Title', editable: true, edittype: 'text', width: 120, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+            ],
+            caption: "Список категорий полей",
+            loadError: function (xhr, st, err) {
+                if (xhr.status == 401) {
+                    //window.location.replace("/Home/Index");
+                    alert(xhr);
+                }
+            }
+        });
+
+        function updateDialog_categories(action) {
+            return {
+                url: api_categories
+                    , closeAfterAdd: true
+                    , closeAfterEdit: true
+                    , afterShowForm: function (formId) { }
+                    , modal: true
+                    , onclickSubmit: function (params) {
+                        var list = $("#grid_categories");
+                        var selectedRow = list.getGridParam("selrow");
+                        rowData = list.getRowData(selectedRow);
+                        params.url += rowData.Id;
+                        params.mtype = action;
+                    }
+                    , width: "500"
+            };
+        }
+
+        $("#grid_categories").jqGrid('navGrid', '#pager_categories',
+            { add: true, edit: true, del: true, refresh: true, search: false },
+             updateDialog_categories('PUT'),
+             updateDialog_categories('POST'),
+             updateDialog_categories('DELETE'),
+             {
+                 onReset: function () {
+                     var jqModal = true, gridid = grid[0].id;
+                     $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                    { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                 },
+                 onSearch: function () {
+                     var jqModal = true, gridid = grid[0].id;
+                     $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                 { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                 }
+             }
+         );
+        $("#pager_categories").find("#pager_categories_center").hide();
+
+        $("#grid_categories").jqGrid('navGrid', '#pager_categories', {}, {}, {}, {},
+        {
+            onReset: function () {
+                var jqModal = true, gridid = grid[0].id;
+                $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                    { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+            }
+        });
+
+    </script>
+
+}

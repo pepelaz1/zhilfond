@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E45B456B-68DA-4EFF-8C84-FE12A636B63C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DAL</RootNamespace>
+    <AssemblyName>DAL</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto">
+      <HintPath>..\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="ExpressionEvaluator">
+      <HintPath>..\packages\ExpressionEvaluator\ExpressionEvaluator.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Security">
+      <HintPath>..\packages\Npgsql.2.0.12.1\lib\net40\Mono.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql">
+      <HintPath>..\packages\Npgsql.2.0.12.1\lib\net40\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="policy.2.0.Npgsql">
+      <HintPath>..\packages\Npgsql.2.0.12.1\lib\net40\policy.2.0.Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Channels" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\Crypter.cs" />
+    <Compile Include="Classes\FormulasEvaluator.cs" />
+    <Compile Include="Classes\RulesValidator.cs" />
+    <Compile Include="Classes\SignatureCreator.cs" />
+    <Compile Include="Classes\SignatureValidator.cs" />
+    <Compile Include="Classes\Utils.cs" />
+    <Compile Include="Classes\ValidateObject.cs" />
+    <Compile Include="Interfaces\IFormulasRepository.cs" />
+    <Compile Include="Interfaces\IAccessRepository.cs" />
+    <Compile Include="Interfaces\IGroupRepTemplatesRepository.cs" />
+    <Compile Include="Interfaces\IReportTemplatesRepository.cs" />
+    <Compile Include="Interfaces\IUmessagesRepository.cs" />
+    <Compile Include="Interfaces\IAuditRepository.cs" />
+    <Compile Include="Interfaces\ISettingsRepository.cs" />
+    <Compile Include="Interfaces\ICoordsRepository.cs" />
+    <Compile Include="Interfaces\IImpFilesRepository.cs" />
+    <Compile Include="Interfaces\IPrivateKeysRepository.cs" />
+    <Compile Include="Interfaces\IGenReportsRepository.cs" />
+    <Compile Include="Interfaces\ITemplateRepository.cs" />
+    <Compile Include="Interfaces\IResultsRepository.cs" />
+    <Compile Include="Interfaces\IRightsRepository.cs" />
+    <Compile Include="Interfaces\IRolesFormsRepository.cs" />
+    <Compile Include="Interfaces\IRolesHousesRepository.cs" />
+    <Compile Include="Interfaces\IXsdRepository.cs" />
+    <Compile Include="Interfaces\IMessagesRepository.cs" />
+    <Compile Include="Interfaces\IAttachmentsRepository.cs" />
+    <Compile Include="Interfaces\IXmlRepository.cs" />
+    <Compile Include="Interfaces\IReportValuesRepository.cs" />
+    <Compile Include="Interfaces\IKeysRepository.cs" />
+    <Compile Include="Interfaces\IGroupHousesRepository.cs" />
+    <Compile Include="Interfaces\IGroupsRepository.cs" />
+    <Compile Include="Interfaces\IReportParamsRepository.cs" />
+    <Compile Include="Interfaces\IValuesRepository.cs" />
+    <Compile Include="Interfaces\IDictsValuesRepository.cs" />
+    <Compile Include="Interfaces\IDictsRepository.cs" />
+    <Compile Include="Interfaces\IRulesRepository.cs" />
+    <Compile Include="Interfaces\IOperationsRepository.cs" />
+    <Compile Include="Interfaces\ICategoriesRepository.cs" />
+    <Compile Include="Interfaces\IFieldsRepository.cs" />
+    <Compile Include="Interfaces\IFormsRepository.cs" />
+    <Compile Include="Interfaces\IHousesRepository.cs" />
+    <Compile Include="Interfaces\IRolesRepository.cs" />
+    <Compile Include="Interfaces\ISessionsRepository.cs" />
+    <Compile Include="Interfaces\IUsersRepository.cs" />
+    <Compile Include="Models\Access.cs" />
+    <Compile Include="Models\Audit.cs" />
+    <Compile Include="Models\ChPwd.cs" />
+    <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Attachment.cs" />
+    <Compile Include="Models\Coords.cs" />
+    <Compile Include="Models\AuditV.cs" />
+    <Compile Include="Models\GroupRepTemplate.cs" />
+    <Compile Include="Models\ImpFileV.cs" />
+    <Compile Include="Models\ZValueAll.cs" />
+    <Compile Include="Models\Formula.cs" />
+    <Compile Include="Models\ReportTemplate.cs" />
+    <Compile Include="Models\UnreadMessageV.cs" />
+    <Compile Include="Models\UnreadMessage.cs" />
+    <Compile Include="Models\Settings.cs" />
+    <Compile Include="Models\Result.cs" />
+    <Compile Include="Models\ImpFile.cs" />
+    <Compile Include="Models\PrivateKey.cs" />
+    <Compile Include="Models\GenReport.cs" />
+    <Compile Include="Models\UserV.cs" />
+    <Compile Include="Models\Right.cs" />
+    <Compile Include="Models\RoleFormV.cs" />
+    <Compile Include="Models\RoleForm.cs" />
+    <Compile Include="Models\RoleHouseV.cs" />
+    <Compile Include="Models\RoleHouse.cs" />
+    <Compile Include="Models\MessageV.cs" />
+    <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\DValue.cs" />
+    <Compile Include="Models\ReportValue.cs" />
+    <Compile Include="Models\GroupHouseV.cs" />
+    <Compile Include="Models\Key.cs" />
+    <Compile Include="Models\GroupHouse.cs" />
+    <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\House.cs" />
+    <Compile Include="Models\ReportParam.cs" />
+    <Compile Include="Models\ReportParamV.cs" />
+    <Compile Include="Models\ZValueV.cs" />
+    <Compile Include="Models\ZValue.cs" />
+    <Compile Include="Models\DictValue.cs" />
+    <Compile Include="Models\Dict.cs" />
+    <Compile Include="Models\RuleV.cs" />
+    <Compile Include="Models\Rule.cs" />
+    <Compile Include="Models\RuleOperation.cs" />
+    <Compile Include="Models\FieldCategory.cs" />
+    <Compile Include="Models\ZFieldV.cs" />
+    <Compile Include="Models\ZField.cs" />
+    <Compile Include="Models\ZForm.cs" />
+    <Compile Include="Models\GridUser.cs" />
+    <Compile Include="Models\HouseV.cs" />
+    <Compile Include="Models\Role.cs" />
+    <Compile Include="Models\Session.cs" />
+    <Compile Include="Models\Token.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\AccessRepository.cs" />
+    <Compile Include="Repositories\CategoriesRepository.cs" />
+    <Compile Include="Repositories\AttachmentsRepository.cs" />
+    <Compile Include="Repositories\CoordsRepository.cs" />
+    <Compile Include="Repositories\AuditRepository.cs" />
+    <Compile Include="Repositories\FormulasRepository.cs" />
+    <Compile Include="Repositories\GroupRepTemplatesRepository.cs" />
+    <Compile Include="Repositories\ReportTemplatesRepository.cs" />
+    <Compile Include="Repositories\UmessagesRepository.cs" />
+    <Compile Include="Repositories\SettingsRepository.cs" />
+    <Compile Include="Repositories\ImpFilesRepository.cs" />
+    <Compile Include="Repositories\PrivateKeysRepository.cs" />
+    <Compile Include="Repositories\GenReportsRepository.cs" />
+    <Compile Include="Repositories\ResultsRepository.cs" />
+    <Compile Include="Repositories\RightsRepository.cs" />
+    <Compile Include="Repositories\RolesFormsRepository.cs" />
+    <Compile Include="Repositories\RolesHousesRepository.cs" />
+    <Compile Include="Repositories\XsdRepository.cs" />
+    <Compile Include="Repositories\MessagesRepository.cs" />
+    <Compile Include="Repositories\XmlRepository.cs" />
+    <Compile Include="Repositories\ReportValuesRepository.cs" />
+    <Compile Include="Repositories\KeysRepository.cs" />
+    <Compile Include="Repositories\GroupHousesRepository.cs" />
+    <Compile Include="Repositories\GroupsRepository.cs" />
+    <Compile Include="Repositories\ReportParamsRepository.cs" />
+    <Compile Include="Repositories\ValuesRepository.cs" />
+    <Compile Include="Repositories\DictsValuesRepository.cs" />
+    <Compile Include="Repositories\DictsRepository.cs" />
+    <Compile Include="Repositories\RulesRepository.cs" />
+    <Compile Include="Repositories\OperationsRepository.cs" />
+    <Compile Include="Repositories\FieldsRepository.cs" />
+    <Compile Include="Repositories\FormsRepository.cs" />
+    <Compile Include="Repositories\HousesRepository.cs" />
+    <Compile Include="Repositories\RolesRepository.cs" />
+    <Compile Include="Repositories\SessionsRepository.cs" />
+    <Compile Include="Repositories\UsersRepository.cs" />
+    <Compile Include="UserContext.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Scripts\jquery-1.5.2.js" />
+    <Content Include="Scripts\jquery-1.5.2.min.js" />
+    <Content Include="Scripts\jquery.form.js" />
+    <Content Include="Scripts\jquery.form.min.js" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

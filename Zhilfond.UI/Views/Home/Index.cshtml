@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "Система управления жилищным фондом";
+}
+
+<div class="custom">
+     <p></p>
+     <h3>Введите ваши учетные данные</h3>
+     <p></p>
+    <form id="signup">
+          <div>         
+            <input id="username" type="username" placeholder="Имя пользователя" autofocus value=""/>        
+            <input id="password" type="password" placeholder="Пароль" value="" />            
+            <input id="btn_login" type="submit" value="Вход" onclick="javascript: authorize(); return false;" style="width:50px;height:25px">
+        </div>
+        <div>
+            <label id="authfail"></label>
+        </div>
+    </form>
+</div>
+​
+@Styles.Render("~/Content/themes/base/css", "~/Content/css") 
+<link href="~/Content/themes/custom/custom.css" rel="stylesheet" type="text/css" /> 
+
+@section scripts {
+ 
+<script src="~/Scripts/carhartl/jquery.cookie.js" type="text/javascript"></script>
+
+<script>
+
+    $().ready(function () {
+        $.removeCookie('PrivateKey', { path: '/' });
+        $.removeCookie('PrivateKeyPass', { path: '/' });
+        $.removeCookie('token', { path: '/' });
+    });
+
+   // $("#btn_login").button();
+
+
+    function authorize() {
+        var token = {};
+        token.UserName = $("#username").val();
+        token.Password = $("#password").val();
+        $.ajax({
+            url: "/api/tokensapi/",
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(token),
+            dataType: "json",
+            success: function (response) {
+               // console.log(response.Key);
+                //$.cookie('token', response.Key, { path: '/' });
+                $.cookie('token', response.Key);
+                window.location.replace("/Main/Index");
+            },
+            error: function (x, e) {
+                $("#authfail").text("Ошибка авторизации " + x.responseText);
+            }
+        });
+    }
+
+</script>
+
+
+}

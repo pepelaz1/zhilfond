@@ -1,0 +1,656 @@
+﻿@{
+    ViewBag.Title = "Жилфонд";
+}
+<div id="title">
+    <h3>Пользователи</h3>
+</div>
+<div id="login_info">
+    <p>Текущий пользователь: <span></span></p>
+</div>
+<div id="total" class="div_total">
+    <table style="margin-top: 0.25em;">
+             <tr>
+                <td>
+                    <table id="grid_users"></table>
+                    <div id="pager_users"></div>
+                </td>               
+                <td style="padding-right: 0">
+                    <table id="grid_keys"></table>
+                    <div id="pager_keys"></div>
+                </td>               
+            </tr>   
+    </table> 
+    <table style="margin-top:0px">
+            <tr>
+                <td>
+                    <table id="grid_roles"></table>
+                    <div id="pager_roles"></div>
+                </td>                
+                <td>
+                    <table id="grid_roleshouses"></table>
+                    <div id="pager_roleshouses"></div>
+                </td>  
+                <td style="padding-right: 0">
+                    <table id="grid_rolesforms"></table>
+                    <div id="pager_rolesforms"></div>
+                </td>  
+            </tr>        
+     </table>
+</div>
+
+@Styles.Render("~/Content/themes/base/css", "~/Content/css")
+
+<link href="~/Content/themes/custom/custom.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/jquery.jqGrid/ui.jqgrid.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/themes/base/jquery.ui.menu.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/themes/base/jquery.ui.datepicker.css" rel="stylesheet" type="text/css" /> 
+
+@section scripts {
+
+    <script src="~/Scripts/jquery-1.9.1.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery-ui-1.10.3.js" type="text/javascript"></script>
+    <script src="~/Scripts/i18n/grid.locale-en.js" type="text/javascript"></script>
+    <script src="~/Scripts/carhartl/jquery.cookie.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.jqGrid.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/global.js" type="text/javascript"></script>
+
+    <script>
+
+        $().ready(function () {
+            showTopMenu();
+            $("#login_info p span").html(getUser($.cookie('token')));
+        });
+
+        // Users grid
+        var api_users = '/api/usersapi/';
+        // region
+        $("#grid_users").jqGrid({
+            url: api_users,
+            datatype: 'json',
+            mtype: 'GET',
+            pager: '#pager_users',
+            pagerpos: 'center',
+            sortable: false,
+            height: 150,
+            width: 600,
+            viewrecords: true,
+            colNames: ['ИД', 'Логин', 'Ф.И.О.', 'Активен', /*'ИД Роли',*/ 'Роль'],
+            colModel: [
+                       { name: 'Id', index: 'Id', editable: false, width: 20, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'Login', index: 'Login', editable: true, edittype: 'text', width: 60, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'Username', index: 'Username', editable: true, edittype: 'text', width: 120, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'Active', index: 'Active', editable: true, edittype: 'checkbox', width: 60, editrules: { required: true }, searchoptions: { sopt: ['cn'] }, formatter: 'checkbox' },                       
+                       /*{ name: 'Id_Role', index: 'Id_Role', editable: true, edittype: 'text', width: 40, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },*/
+                       {
+                           name: 'Id_Role', index: 'Id_Role', editable: true, edittype: 'select', width: 80, editrules: { required: true }, searchoptions: { sopt: ['cn'] },
+                           editoptions: {
+                               dataUrl: '/api/rolesapi/?type=plain',
+                               buildSelect: function (data) {
+                                   var response = jQuery.parseJSON(data);
+                                   var s = '<select>';
+                                   if (response && response.length) {
+                                       for (var i = 0, l = response.length; i < l ; i++) {
+                                           var r = response[i];
+                                           s += '<option value="' + r["Id"] + '">' + r["Title"] + '</option>';
+                                       }
+                                   }
+                                   return s + "</select>";
+                               },
+                               style: "width: 200px"
+                           }                       
+                       }
+            ],
+            caption: "Список пользователей",
+            onSelectRow: function (ids) {
+                var rowData = $("#grid_users").getRowData(ids);
+                $("#grid_keys").jqGrid('setCaption', "Ключи пользователя: " + rowData.Username);
+                $("#grid_keys").jqGrid('setGridParam', { url: api_keys + "?id_user=" + rowData.Id }).trigger('reloadGrid');
+            },
+            //     autowidth: true,
+            loadError: function (xhr, st, err) {
+                if (xhr.status == 401) {
+                    //window.location.replace("/Home/Index");
+                    alert(xhr);
+                }
+            },
+            loadComplete: function (data) {
+            }
+        });
+
+        function updateDialog_users(action) {
+            return {
+                url: api_users
+                    , closeAfterAdd: true
+                    , closeAfterEdit: true
+                    , afterShowForm: function (formId) { }
+                    , modal: true
+                    , onclickSubmit: function (params) {
+                        var list = $("#grid_users");
+                        var selectedRow = list.getGridParam("selrow");
+                        rowData = list.getRowData(selectedRow);
+                        params.url += rowData.Id;
+                        params.mtype = action;
+                    }
+                    , width: "500"
+            };
+        }
+
+        $("#grid_users").jqGrid('navGrid', '#pager_users',
+            { add: true, edit: true, del: true, refresh: true, search: false },
+             updateDialog_users('PUT'),
+             updateDialog_users('POST'),
+             updateDialog_users('DELETE'),
+             {
+                 onReset: function () {
+                     var jqModal = true, gridid = grid[0].id;
+                     $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                    { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                 },
+                 onSearch: function () {
+                     var jqModal = true, gridid = grid[0].id;
+                     $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                 { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                 }
+             }
+         );
+        $("#pager_users").find("#pager_users_center").hide();
+
+        $("#grid_users").jqGrid('navGrid', '#pager_users', {}, {}, {}, {},
+        {
+            onReset: function () {
+                var jqModal = true, gridid = grid[0].id;
+                $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                    { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+            }
+        });
+        /// End of Users Grid
+        
+        /// Keys grid
+        var api_keys = '/api/keysapi/';
+        // region
+        $("#grid_keys").jqGrid({
+            url: api_keys,
+            datatype: 'json',
+            mtype: 'GET',
+            pager: '#pager_keys',
+            pagerpos: 'center',
+            sortable: false,
+            height: 150,
+            width: 625,
+            viewrecords: true,
+            colNames: ['ИД', 'С','По', "Ключ"],
+            colModel: [{ name: 'Id', index: 'Id', editable: false, width: 10, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'Date_Start', index: 'Date_Start', editable: true, edittype: 'text', width: 23, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'Date_Finish', index: 'Date_Finish', editable: true, edittype: 'text', width: 23, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'KeyValue', index: 'KeyValue', editable: false, edittype: 'text', width: 160, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+            ],
+            caption: "Ключи пользователя",
+            onSelectRow: function (ids) {
+            },
+            //     autowidth: true,
+            loadError: function (xhr, st, err) {
+                if (xhr.status == 401) {
+                    //window.location.replace("/Home/Index");
+                    alert(xhr);
+                }
+            },
+            loadComplete: function (data) {
+                $("#Date_Start").datepicker($.datepicker.regional["ru"]);
+            }
+        });
+
+        function updateDialog_keys(action) {
+            return {
+                url: api_keys
+                    , closeAfterAdd: true
+                    , closeAfterEdit: true
+                    , afterShowForm: function (keyId) { }
+                    , modal: true
+                    , onclickSubmit: function (params) {                        
+                        var list = $("#grid_keys");
+                        var selectedRow = list.getGridParam("selrow");
+                        rowData = list.getRowData(selectedRow);
+
+                        var gusers = $("#grid_users");
+                        var usersrow = gusers.getGridParam("selrow");
+                        var usersrowData = gusers.getRowData(usersrow);
+
+                        params.url += rowData.Id + "?id_user=" + usersrowData.Id;
+                        params.mtype = action;
+                    }
+                    , width: "500"
+            };
+        }
+
+        $("#grid_keys").jqGrid('navGrid', '#pager_keys',
+            { add: false, edit: true, del: true, refresh: true, search: false },
+             updateDialog_keys('PUT'),             
+             updateDialog_keys('DELETE'),
+             {
+                 onReset: function () {
+                     var jqModal = true, gridid = grid[0].id;
+                     $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                    { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                 },
+                 onSearch: function () {
+                     var jqModal = true, gridid = grid[0].id;
+                     $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                 { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                 }
+             }
+         );
+        $("#pager_keys").find("#pager_keys_center").hide();
+
+        $("#grid_keys").jqGrid('navGrid', '#pager_keys', {}, {}, {}, {},
+        {
+            onReset: function () {
+                var jqModal = true, gridid = grid[0].id;
+                $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                    { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+            }
+        });
+        /// End of Keys grid
+
+        /// Roles grid
+        var api_roles = '/api/rolesapi/';
+
+        // region
+        $("#grid_roles").jqGrid({
+            url: api_roles,
+            datatype: 'json',
+            mtype: 'GET',
+            pager: '#pager_roles',
+            pagerpos: 'center',
+            sortable: false,
+            height: 350,
+            width: 180,
+            viewrecords: true,
+            colNames: ['ИД', 'Название'],
+            colModel: [{ name: 'Id', index: 'Id', editable: false, width: 20, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'Title', index: 'Title', editable: true, edittype: 'text', width: 120, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+            ],
+            caption: "Список ролей",
+            onSelectRow: function (ids) {
+                var rowData = $("#grid_roles").getRowData(ids);
+                //$("#grid_rolesvalues").jqGrid('setCaption', "Значения справочника: " + rowData.Title);
+                //$("#grid_rolesvalues").jqGrid('setGridParam', { url: api_rolesvalues + "?id_role=" + rowData.Id }).trigger('reloadGrid');
+
+                $("#grid_roleshouses").jqGrid('setCaption', "Дома роли: " + rowData.Title);
+                $("#grid_roleshouses").jqGrid('setGridParam', { url: api_roleshouses + "?id_role=" + rowData.Id }).trigger('reloadGrid');
+
+                $("#grid_rolesforms").jqGrid('setCaption', "Формы роли: " + rowData.Title);
+                $("#grid_rolesforms").jqGrid('setGridParam', { url: api_rolesforms + "?id_role=" + rowData.Id }).trigger('reloadGrid');
+
+            },
+            //     autowidth: true,
+            loadError: function (xhr, st, err) {
+                if (xhr.status == 401) {
+                    //window.location.replace("/Home/Index");
+                    alert(xhr);
+                }
+            },
+            loadComplete: function (data) {
+            }
+        });
+
+        function updateDialog_roles(action) {
+            return {
+                url: api_roles
+                    , closeAfterAdd: true
+                    , closeAfterEdit: true
+                    , afterShowForm: function (formId) { }
+                    , modal: true
+                    , onclickSubmit: function (params) {
+                        var list = $("#grid_roles");
+                        var selectedRow = list.getGridParam("selrow");
+                        rowData = list.getRowData(selectedRow);
+                        params.url += rowData.Id;
+                        params.mtype = action;
+                    }
+                    , width: "500"
+            };
+        }
+
+        $("#grid_roles").jqGrid('navGrid', '#pager_roles',
+            { add: true, edit: true, del: true, refresh: true, search: false },
+             updateDialog_roles('PUT'),
+             updateDialog_roles('POST'),
+             updateDialog_roles('DELETE'),
+             {
+                 onReset: function () {
+                     var jqModal = true, gridid = grid[0].id;
+                     $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                    { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                 },
+                 onSearch: function () {
+                     var jqModal = true, gridid = grid[0].id;
+                     $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                 { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                 }
+             }
+         );
+        $("#pager_roles").find("#pager_roles_center").hide();
+
+        $("#grid_roles").jqGrid('navGrid', '#pager_roles', {}, {}, {}, {},
+        {
+            onReset: function () {
+                var jqModal = true, gridid = grid[0].id;
+                $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                    { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+            }
+        });
+        /// End of Roles grid
+
+        
+        /// Roleshouses grid
+        var api_roleshouses = '/api/roleshousesapi/';
+
+        // region
+        $("#grid_roleshouses").jqGrid({
+            url: api_roleshouses,
+            datatype: 'json',
+            mtype: 'GET',
+            pager: '#pager_roleshouses',
+            pagerpos: 'center',
+            sortable: false,
+            height: 350,
+            width: 520,
+            viewrecords: true,
+            colNames: ['ИД', 'Роль','ИД Дома','Уровень доступа'],
+            colModel: [{ name: 'Id', index: 'Id', editable: false, width: 20, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'Role', index: 'Role', editable: false, edittype: 'text', width: 120, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       /*{
+                           name: 'Id_Role', index: 'Id_Role', editable: true, edittype: 'select', width: 80, editrules: { required: true }, searchoptions: { sopt: ['cn'] },
+                           editoptions: {
+                               dataUrl: '/api/rolesapi/?type=plain',
+                               buildSelect: function (data) {
+                                   var response = jQuery.parseJSON(data);
+                                   var s = '<select>';
+                                   if (response && response.length) {
+                                       for (var i = 0, l = response.length; i < l ; i++) {
+                                           var r = response[i];
+                                           s += '<option value="' + r["Id"] + '">' + r["Title"] + '</option>';
+                                       }
+                                   }
+                                   return s + "</select>";
+                               },
+                               style: "width: 300px"
+                           }                       
+                       },*/
+                       { name: 'Id_House', index: 'Id_House', editable: true, edittype: 'text', width: 120, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       /*{
+                           name: 'House', index: 'House', editable: true, edittype: 'select', width: 80, editrules: { required: true }, searchoptions: { sopt: ['cn'] },
+                           editoptions: {
+                               dataUrl: '/api/housesapi/?type=plain',
+                               buildSelect: function (data) {
+                                   var response = jQuery.parseJSON(data);
+                                   var s = '<select>';
+                                   if (response && response.length) {
+                                       for (var i = 0, l = response.length; i < l ; i++) {
+                                           var r = response[i];
+                                           s += '<option value="' + r["Id"] + '">' + r["Id"] + '</option>';
+                                       }
+                                   }
+                                   return s + "</select>";
+                               },
+                               style: "width: 200px"
+                           }
+                       },*/
+                       /*{ name: 'Right', index: 'Right', editable: true, edittype: 'text', width: 120, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },*/
+                       {
+                           name: 'Id_Right', index: 'Id_Right', editable: true, edittype: 'select', width: 120, editrules: { required: true }, searchoptions: { sopt: ['cn'] },
+                           editoptions: {
+                               dataUrl: '/api/rightsapi/?type=plain',
+                               buildSelect: function (data) {
+                                   var response = jQuery.parseJSON(data);
+                                   var s = '<select>';
+                                   if (response && response.length) {
+                                       for (var i = 0, l = response.length; i < l ; i++) {
+                                           var r = response[i];
+                                           s += '<option value="' + r["Id"] + '">' + r["Title"] + '</option>';
+                                       }
+                                   }
+                                   return s + "</select>";
+                               },
+                               style: "width: 300px"
+                           }
+                       },
+            ],
+            caption: "Дома роли",
+            onSelectRow: function (ids) {
+                //var rowData = $("#grid_roles").getRowData(ids);
+                //$("#grid_rolesvalues").jqGrid('setCaption', "Значения справочника: " + rowData.Title);
+                //$("#grid_rolesvalues").jqGrid('setGridParam', { url: api_rolesvalues + "?id_role=" + rowData.Id }).trigger('reloadGrid');
+            },
+            //     autowidth: true,
+            loadError: function (xhr, st, err) {
+                if (xhr.status == 401) {
+                    //window.location.replace("/Home/Index");
+                    alert(xhr);
+                }
+            },
+            loadComplete: function (data) {
+            }
+        });
+
+        function updateDialog_roleshouses(action) {
+            return {
+                url: api_roleshouses
+                    , closeAfterAdd: true
+                    , closeAfterEdit: true
+                    , afterShowForm: function (formId) { }
+                    , modal: true
+                    , onclickSubmit: function (params) {
+
+                        /*var list = $("#grid_roleshouses");
+                        var selectedRow = list.getGridParam("selrow");
+                        rowData = list.getRowData(selectedRow);
+                        params.url += rowData.Id;
+                        params.mtype = action;*/
+
+                        var list = $("#grid_roleshouses");
+                        var selectedRow = list.getGridParam("selrow");
+                        rowData = list.getRowData(selectedRow);
+
+                        var groles = $("#grid_roles");
+                        var rolesrow = groles.getGridParam("selrow");
+                        var rolesrowData = groles.getRowData(rolesrow);
+
+                        params.url += rowData.Id + "?id_role=" + rolesrowData.Id;
+                        params.mtype = action;
+                    }
+                    , width: "500"
+            };
+        }
+
+        $("#grid_roleshouses").jqGrid('navGrid', '#pager_roleshouses',
+            { add: true, edit: true, del: true, refresh: true, search: false },
+             updateDialog_roleshouses('PUT'),
+             updateDialog_roleshouses('POST'),
+             updateDialog_roleshouses('DELETE'),
+             {
+                 onReset: function () {
+                     var jqModal = true, gridid = grid[0].id;
+                     $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                    { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                 },
+                 onSearch: function () {
+                     var jqModal = true, gridid = grid[0].id;
+                     $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                 { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                 }
+             }
+         );
+        $("#pager_roleshouses").find("#pager_roleshouses_center").hide();
+
+        $("#grid_roleshouses").jqGrid('navGrid', '#pager_roleshouses', {}, {}, {}, {},
+        {
+            onReset: function () {
+                var jqModal = true, gridid = grid[0].id;
+                $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                    { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+            }
+        });
+        /// End of Roleshouses grid
+
+        /// Rolesforms grid
+        var api_rolesforms = '/api/rolesformsapi/';
+
+        // region
+        $("#grid_rolesforms").jqGrid({
+            url: api_rolesforms,
+            datatype: 'json',
+            mtype: 'GET',
+            pager: '#pager_rolesforms',
+            pagerpos: 'center',
+            sortable: false,
+            height: 350,
+            width: 510,
+            viewrecords: true,
+            colNames: ['ИД', 'Роль','Форма','Категория','Уровень доступа'],
+            colModel: [{ name: 'Id', index: 'Id', editable: false, width: 20, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'Id_Role', index: 'Id_Role', editable: false, edittype: 'text', width: 90, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       /*{ name: 'Id_Form', index: 'Id_Form', editable: true, edittype: 'text', width: 150, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },*/
+                       {
+                           name: 'Id_Form', index: 'Id_Form', editable: true, edittype: 'select', width: 120, editrules: { required: true }, searchoptions: { sopt: ['cn'] },
+                           editoptions: {
+                               dataUrl: '/api/formsapi/?type=plain&token='+$.cookie('token'),
+                               buildSelect: function (data) {
+                                   var response = jQuery.parseJSON(data);
+                                   var s = '<select>';
+                                   if (response && response.rows.length) {
+                                       for (var i = 0, l = response.rows.length; i < l ; i++) {
+                                       
+                                           var r = response.rows[i];
+                                           s += '<option value="' + r["Id"] + '">' + r["Title"] + '</option>';
+                                       }
+                                   }
+                                   return s + "</select>";
+                               },
+                               style: "width: 300px"
+                           }
+                       },
+                       /*{ name: 'Id_Cat', index: 'Cat', editable: true, edittype: 'text', width: 120, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },*/
+                       {
+                           name: 'Id_Cat', index: 'Id_Cat', editable: true, edittype: 'select', width: 120, editrules: { required: true }, searchoptions: { sopt: ['cn'] },
+                           editoptions: {
+                               dataUrl: '/api/categoriesapi/?type=plain',
+                               buildSelect: function (data) {
+                                   var response = jQuery.parseJSON(data);
+                                   var s = '<select>';
+                                   if (response && response.length) {
+                                       for (var i = 0, l = response.length; i < l ; i++) {
+                                           var r = response[i];
+                                           s += '<option value="' + r["Id"] + '">' + r["Title"] + '</option>';
+                                       }
+                                   }
+                                   return s + "</select>";
+                               },
+                               style: "width: 300px"
+                           }
+                       },
+                       /*{ name: 'Right', index: 'Right', editable: true, edittype: 'text', width: 120, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },*/
+                       {
+                           name: 'Id_Right', index: 'Id_Right', editable: true, edittype: 'select', width: 120, editrules: { required: true }, searchoptions: { sopt: ['cn'] },
+                           editoptions: {
+                               dataUrl: '/api/rightsapi/?type=plain',
+                               buildSelect: function (data) {
+                                   var response = jQuery.parseJSON(data);
+                                   var s = '<select>';
+                                   if (response && response.length) {
+                                       for (var i = 0, l = response.length; i < l ; i++) {
+                                           var r = response[i];
+                                           s += '<option value="' + r["Id"] + '">' + r["Title"] + '</option>';
+                                       }
+                                   }
+                                   return s + "</select>";
+                               },
+                               style: "width: 300px"
+                           }
+                       },
+            ],
+            caption: "Формы роли",
+            onSelectRow: function (ids) {
+                //var rowData = $("#grid_roles").getRowData(ids);
+                //$("#grid_rolesvalues").jqGrid('setCaption', "Значения справочника: " + rowData.Title);
+                //$("#grid_rolesvalues").jqGrid('setGridParam', { url: api_rolesvalues + "?id_role=" + rowData.Id }).trigger('reloadGrid');
+            },
+            //     autowidth: true,
+            loadError: function (xhr, st, err) {
+                if (xhr.status == 401) {
+                    //window.location.replace("/Home/Index");
+                    alert(xhr);
+                }
+            },
+            loadComplete: function (data) {
+            }
+        });
+
+        function updateDialog_rolesforms(action) {
+            return {
+                url: api_rolesforms
+                    , closeAfterAdd: true
+                    , closeAfterEdit: true
+                    , afterShowForm: function (formId) { }
+                    , modal: true
+                    , onclickSubmit: function (params) {
+                        /* var list = $("#grid_roles");
+                         var selectedRow = list.getGridParam("selrow");
+                         rowData = list.getRowData(selectedRow);
+                         params.url += rowData.Id;
+                         params.mtype = action;*/
+
+                        var list = $("#grid_rolesforms");
+                        var selectedRow = list.getGridParam("selrow");
+                        rowData = list.getRowData(selectedRow);
+
+                        var groles = $("#grid_roles");
+                        var rolesrow = groles.getGridParam("selrow");
+                        var rolesrowData = groles.getRowData(rolesrow);
+
+                        params.url += rowData.Id + "?id_role=" + rolesrowData.Id;
+                        params.mtype = action;
+                    }
+                    , width: "500"
+            };
+        }
+
+        $("#grid_rolesforms").jqGrid('navGrid', '#pager_rolesforms',
+            { add: true, edit: true, del: true, refresh: true, search: false },
+             updateDialog_rolesforms('PUT'),
+             updateDialog_rolesforms('POST'),
+             updateDialog_rolesforms('DELETE'),
+             {
+                 onReset: function () {
+                     var jqModal = true, gridid = grid[0].id;
+                     $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                    { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                 },
+                 onSearch: function () {
+                     var jqModal = true, gridid = grid[0].id;
+                     $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                 { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                 }
+             }
+         );
+        $("#pager_rolesforms").find("#pager_rolesforms_center").hide();
+
+        $("#grid_rolesforms").jqGrid('navGrid', '#pager_rolesforms', {}, {}, {}, {},
+        {
+            onReset: function () {
+                var jqModal = true, gridid = grid[0].id;
+                $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                    { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+            }
+        });
+        /// End of Roleshouses grid
+    </script>
+
+    <style>
+        .ui-jqgrid tr.jqgrow td 
+        {
+            white-space: normal;
+            max-height: 30px;
+        }
+    </style>
+}

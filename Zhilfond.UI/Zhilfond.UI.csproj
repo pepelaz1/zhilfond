@@ -1,0 +1,822 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{53A638A0-76AC-4382-A156-F468EC29E405}</ProjectGuid>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UI</RootNamespace>
+    <AssemblyName>UI</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ClosedXML">
+      <HintPath>..\packages\ClosedXml.0.69.1.0\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.0.5022.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DocumentFormat.OpenXml\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Npgsql, Version=2.0.12.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Npgsql.2.0.12.1\lib\net40\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.20710.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.20710.0\lib\net40\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.20710.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.0.0\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Providers">
+      <HintPath>..\packages\Microsoft.AspNet.Providers.Core.1.1\lib\net40\System.Web.Providers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20710.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.1.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.1.0\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Code\SecureActionLink.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Classes\DetailReportBuilder.cs" />
+    <Compile Include="Classes\ReportBuilder.cs" />
+    <Compile Include="Classes\TokenValidator.cs" />
+    <Compile Include="Classes\Utils.cs" />
+    <Compile Include="Controllers\AccessApiController.cs" />
+    <Compile Include="Controllers\AccessDeniedController.cs" />
+    <Compile Include="Controllers\AttachmentsApiController.cs" />
+    <Compile Include="Controllers\CategoriesApiController.cs" />
+    <Compile Include="Controllers\ChangePassApiController.cs" />
+    <Compile Include="Controllers\CoordsApiController.cs" />
+    <Compile Include="Controllers\AuditApiController.cs" />
+    <Compile Include="Controllers\DetailGroupReportsApiController.cs" />
+    <Compile Include="Controllers\GroupRepTemplatesApiController.cs" />
+    <Compile Include="Controllers\MatchesApiController.cs" />
+    <Compile Include="Controllers\ValidateApiController.cs" />
+    <Compile Include="Controllers\FormulasApiController.cs" />
+    <Compile Include="Controllers\ReportTemplatesApiController.cs" />
+    <Compile Include="Controllers\DetailReportsApiController.cs" />
+    <Compile Include="Controllers\UmessagesApiController.cs" />
+    <Compile Include="Controllers\SettingsApiController.cs" />
+    <Compile Include="Controllers\GroupsApiController.cs" />
+    <Compile Include="Controllers\ImpDetailsApiController.cs" />
+    <Compile Include="Controllers\ImpFilesApiController.cs" />
+    <Compile Include="Controllers\GenReportsApiController.cs" />
+    <Compile Include="Controllers\RightsApiController.cs" />
+    <Compile Include="Controllers\RolesFormsApiController.cs" />
+    <Compile Include="Controllers\RolesHousesApiController.cs" />
+    <Compile Include="Controllers\XsdGeneratorApiController.cs" />
+    <Compile Include="Controllers\MessagesApiController.cs" />
+    <Compile Include="Controllers\XmlGeneratorApiController.cs" />
+    <Compile Include="Controllers\KeysApiController.cs" />
+    <Compile Include="Controllers\GroupHousesApiController.cs" />
+    <Compile Include="Controllers\DictsValuesApiController.cs" />
+    <Compile Include="Controllers\DictsApiController.cs" />
+    <Compile Include="Controllers\FieldsApiController.cs" />
+    <Compile Include="Controllers\FileUploadApiController.cs" />
+    <Compile Include="Controllers\FormsApiController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HousesApiController.cs" />
+    <Compile Include="Controllers\MainController.cs" />
+    <Compile Include="Controllers\OperationsApiController.cs" />
+    <Compile Include="Controllers\ReportBuilderApiController.cs" />
+    <Compile Include="Controllers\ReportParamsApiController.cs" />
+    <Compile Include="Controllers\RolesApiController.cs" />
+    <Compile Include="Controllers\RulesApiController.cs" />
+    <Compile Include="Controllers\TokensApiController.cs" />
+    <Compile Include="Controllers\UsersApiController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Controllers\ValuesApiController.cs" />
+    <Compile Include="Filters\TokenActionAuthorize.cs" />
+    <Compile Include="Filters\TokenAuthorize.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\jquery.jqGrid\ellipsis-xbl.xml" />
+    <Content Include="Content\jquery.jqGrid\ui.jqgrid.css" />
+    <Content Include="Content\jquery.splitter.css" />
+    <Content Include="Content\themes\base\images\animated-overlay.gif" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
+    <Content Include="Content\themes\base\jquery.ui.all.css" />
+    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
+    <Content Include="Content\themes\base\jquery.ui.base.css" />
+    <Content Include="Content\themes\base\jquery.ui.button.css" />
+    <Content Include="Content\themes\base\jquery.ui.core.css" />
+    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
+    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Content\themes\base\jquery.ui.menu.css" />
+    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
+    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
+    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
+    <Content Include="Content\themes\base\jquery.ui.slider.css" />
+    <Content Include="Content\themes\base\jquery.ui.spinner.css" />
+    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
+    <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Content\themes\base\jquery.ui.tooltip.css" />
+    <Content Include="Content\themes\base\minified\images\animated-overlay.gif" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.menu.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.spinner.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
+    <Content Include="Content\themes\custom\custom.css" />
+    <Content Include="Content\themes\custom\images\wait.gif" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Images\success.png" />
+    <Content Include="Images\warning_48.png" />
+    <Content Include="Scripts\ajaxfileupload.js" />
+    <Content Include="Scripts\carhartl\jquery.cookie.js" />
+    <Content Include="Scripts\crypto-js\components\aes-min.js" />
+    <Content Include="Scripts\crypto-js\components\aes.js" />
+    <Content Include="Scripts\crypto-js\components\cipher-core-min.js" />
+    <Content Include="Scripts\crypto-js\components\cipher-core.js" />
+    <Content Include="Scripts\crypto-js\components\core-min.js" />
+    <Content Include="Scripts\crypto-js\components\core.js" />
+    <Content Include="Scripts\crypto-js\components\enc-base64-min.js" />
+    <Content Include="Scripts\crypto-js\components\enc-base64.js" />
+    <Content Include="Scripts\crypto-js\components\enc-utf16-min.js" />
+    <Content Include="Scripts\crypto-js\components\enc-utf16.js" />
+    <Content Include="Scripts\crypto-js\components\evpkdf-min.js" />
+    <Content Include="Scripts\crypto-js\components\evpkdf.js" />
+    <Content Include="Scripts\crypto-js\components\format-hex-min.js" />
+    <Content Include="Scripts\crypto-js\components\format-hex.js" />
+    <Content Include="Scripts\crypto-js\components\hmac-min.js" />
+    <Content Include="Scripts\crypto-js\components\hmac.js" />
+    <Content Include="Scripts\crypto-js\components\lib-typedarrays-min.js" />
+    <Content Include="Scripts\crypto-js\components\lib-typedarrays.js" />
+    <Content Include="Scripts\crypto-js\components\md5-min.js" />
+    <Content Include="Scripts\crypto-js\components\md5.js" />
+    <Content Include="Scripts\crypto-js\components\mode-cfb-min.js" />
+    <Content Include="Scripts\crypto-js\components\mode-cfb.js" />
+    <Content Include="Scripts\crypto-js\components\mode-ctr-gladman-min.js" />
+    <Content Include="Scripts\crypto-js\components\mode-ctr-gladman.js" />
+    <Content Include="Scripts\crypto-js\components\mode-ctr-min.js" />
+    <Content Include="Scripts\crypto-js\components\mode-ctr.js" />
+    <Content Include="Scripts\crypto-js\components\mode-ecb-min.js" />
+    <Content Include="Scripts\crypto-js\components\mode-ecb.js" />
+    <Content Include="Scripts\crypto-js\components\mode-ofb-min.js" />
+    <Content Include="Scripts\crypto-js\components\mode-ofb.js" />
+    <Content Include="Scripts\crypto-js\components\pad-ansix923-min.js" />
+    <Content Include="Scripts\crypto-js\components\pad-ansix923.js" />
+    <Content Include="Scripts\crypto-js\components\pad-iso10126-min.js" />
+    <Content Include="Scripts\crypto-js\components\pad-iso10126.js" />
+    <Content Include="Scripts\crypto-js\components\pad-iso97971-min.js" />
+    <Content Include="Scripts\crypto-js\components\pad-iso97971.js" />
+    <Content Include="Scripts\crypto-js\components\pad-nopadding-min.js" />
+    <Content Include="Scripts\crypto-js\components\pad-nopadding.js" />
+    <Content Include="Scripts\crypto-js\components\pad-zeropadding-min.js" />
+    <Content Include="Scripts\crypto-js\components\pad-zeropadding.js" />
+    <Content Include="Scripts\crypto-js\components\pbkdf2-min.js" />
+    <Content Include="Scripts\crypto-js\components\pbkdf2.js" />
+    <Content Include="Scripts\crypto-js\components\rabbit-legacy-min.js" />
+    <Content Include="Scripts\crypto-js\components\rabbit-legacy.js" />
+    <Content Include="Scripts\crypto-js\components\rabbit-min.js" />
+    <Content Include="Scripts\crypto-js\components\rabbit.js" />
+    <Content Include="Scripts\crypto-js\components\rc4-min.js" />
+    <Content Include="Scripts\crypto-js\components\rc4.js" />
+    <Content Include="Scripts\crypto-js\components\ripemd160-min.js" />
+    <Content Include="Scripts\crypto-js\components\ripemd160.js" />
+    <Content Include="Scripts\crypto-js\components\sha1-min.js" />
+    <Content Include="Scripts\crypto-js\components\sha1.js" />
+    <Content Include="Scripts\crypto-js\components\sha224-min.js" />
+    <Content Include="Scripts\crypto-js\components\sha224.js" />
+    <Content Include="Scripts\crypto-js\components\sha256-min.js" />
+    <Content Include="Scripts\crypto-js\components\sha256.js" />
+    <Content Include="Scripts\crypto-js\components\sha3-min.js" />
+    <Content Include="Scripts\crypto-js\components\sha3.js" />
+    <Content Include="Scripts\crypto-js\components\sha384-min.js" />
+    <Content Include="Scripts\crypto-js\components\sha384.js" />
+    <Content Include="Scripts\crypto-js\components\sha512-min.js" />
+    <Content Include="Scripts\crypto-js\components\sha512.js" />
+    <Content Include="Scripts\crypto-js\components\tripledes-min.js" />
+    <Content Include="Scripts\crypto-js\components\tripledes.js" />
+    <Content Include="Scripts\crypto-js\components\x64-core-min.js" />
+    <Content Include="Scripts\crypto-js\components\x64-core.js" />
+    <Content Include="Scripts\crypto-js\rollups\aes.js" />
+    <Content Include="Scripts\crypto-js\rollups\hmac-md5.js" />
+    <Content Include="Scripts\crypto-js\rollups\hmac-ripemd160.js" />
+    <Content Include="Scripts\crypto-js\rollups\hmac-sha1.js" />
+    <Content Include="Scripts\crypto-js\rollups\hmac-sha224.js" />
+    <Content Include="Scripts\crypto-js\rollups\hmac-sha256.js" />
+    <Content Include="Scripts\crypto-js\rollups\hmac-sha3.js" />
+    <Content Include="Scripts\crypto-js\rollups\hmac-sha384.js" />
+    <Content Include="Scripts\crypto-js\rollups\hmac-sha512.js" />
+    <Content Include="Scripts\crypto-js\rollups\md5.js" />
+    <Content Include="Scripts\crypto-js\rollups\pbkdf2.js" />
+    <Content Include="Scripts\crypto-js\rollups\rabbit-legacy.js" />
+    <Content Include="Scripts\crypto-js\rollups\rabbit.js" />
+    <Content Include="Scripts\crypto-js\rollups\rc4.js" />
+    <Content Include="Scripts\crypto-js\rollups\ripemd160.js" />
+    <Content Include="Scripts\crypto-js\rollups\sha1.js" />
+    <Content Include="Scripts\crypto-js\rollups\sha224.js" />
+    <Content Include="Scripts\crypto-js\rollups\sha256.js" />
+    <Content Include="Scripts\crypto-js\rollups\sha3.js" />
+    <Content Include="Scripts\crypto-js\rollups\sha384.js" />
+    <Content Include="Scripts\crypto-js\rollups\sha512.js" />
+    <Content Include="Scripts\crypto-js\rollups\tripledes.js" />
+    <Content Include="Scripts\fileupload\angularjs.html" />
+    <Content Include="Scripts\fileupload\basic-plus.html" />
+    <Content Include="Scripts\fileupload\basic.html" />
+    <Content Include="Scripts\fileupload\cors\postmessage.html" />
+    <Content Include="Scripts\fileupload\cors\result.html" />
+    <Content Include="Scripts\fileupload\css\demo-ie8.css" />
+    <Content Include="Scripts\fileupload\css\demo.css" />
+    <Content Include="Scripts\fileupload\css\jquery.fileupload-noscript.css" />
+    <Content Include="Scripts\fileupload\css\jquery.fileupload-ui-noscript.css" />
+    <Content Include="Scripts\fileupload\css\jquery.fileupload-ui.css" />
+    <Content Include="Scripts\fileupload\css\jquery.fileupload.css" />
+    <Content Include="Scripts\fileupload\css\style.css" />
+    <Content Include="Scripts\fileupload\Gruntfile.js" />
+    <Content Include="Scripts\fileupload\img\loading.gif" />
+    <Content Include="Scripts\fileupload\img\progressbar.gif" />
+    <Content Include="Scripts\fileupload\index.html" />
+    <Content Include="Scripts\fileupload\jquery-ui.html" />
+    <Content Include="Scripts\fileupload\js\app.js" />
+    <Content Include="Scripts\fileupload\js\cors\jquery.postmessage-transport.js" />
+    <Content Include="Scripts\fileupload\js\cors\jquery.xdr-transport.js" />
+    <Content Include="Scripts\fileupload\js\jquery.fileupload-angular.js" />
+    <Content Include="Scripts\fileupload\js\jquery.fileupload-audio.js" />
+    <Content Include="Scripts\fileupload\js\jquery.fileupload-image.js" />
+    <Content Include="Scripts\fileupload\js\jquery.fileupload-jquery-ui.js" />
+    <Content Include="Scripts\fileupload\js\jquery.fileupload-process.js" />
+    <Content Include="Scripts\fileupload\js\jquery.fileupload-ui.js" />
+    <Content Include="Scripts\fileupload\js\jquery.fileupload-validate.js" />
+    <Content Include="Scripts\fileupload\js\jquery.fileupload-video.js" />
+    <Content Include="Scripts\fileupload\js\jquery.fileupload.js" />
+    <Content Include="Scripts\fileupload\js\jquery.iframe-transport.js" />
+    <Content Include="Scripts\fileupload\js\main.js" />
+    <Content Include="Scripts\fileupload\js\vendor\jquery.ui.widget.js" />
+    <Content Include="Scripts\fileupload\server\gae-go\static\favicon.ico" />
+    <Content Include="Scripts\fileupload\server\gae-go\static\robots.txt" />
+    <Content Include="Scripts\fileupload\server\gae-python\static\favicon.ico" />
+    <Content Include="Scripts\fileupload\server\gae-python\static\robots.txt" />
+    <Content Include="Scripts\fileupload\server\node\server.js" />
+    <Content Include="Scripts\fileupload\test\index.html" />
+    <Content Include="Scripts\fileupload\test\test.js" />
+    <Content Include="Scripts\global.js" />
+    <Content Include="Scripts\i18n\grid.locale-ar.js" />
+    <Content Include="Scripts\i18n\grid.locale-bg.js" />
+    <Content Include="Scripts\i18n\grid.locale-bg1251.js" />
+    <Content Include="Scripts\i18n\grid.locale-cat.js" />
+    <Content Include="Scripts\i18n\grid.locale-cn.js" />
+    <Content Include="Scripts\i18n\grid.locale-cs.js" />
+    <Content Include="Scripts\i18n\grid.locale-da.js" />
+    <Content Include="Scripts\i18n\grid.locale-de.js" />
+    <Content Include="Scripts\i18n\grid.locale-dk.js" />
+    <Content Include="Scripts\i18n\grid.locale-el.js" />
+    <Content Include="Scripts\i18n\grid.locale-en.js" />
+    <Content Include="Scripts\i18n\grid.locale-es.js" />
+    <Content Include="Scripts\i18n\grid.locale-fa.js" />
+    <Content Include="Scripts\i18n\grid.locale-fi.js" />
+    <Content Include="Scripts\i18n\grid.locale-fr.js" />
+    <Content Include="Scripts\i18n\grid.locale-gl.js" />
+    <Content Include="Scripts\i18n\grid.locale-he.js" />
+    <Content Include="Scripts\i18n\grid.locale-hr.js" />
+    <Content Include="Scripts\i18n\grid.locale-hr1250.js" />
+    <Content Include="Scripts\i18n\grid.locale-hu.js" />
+    <Content Include="Scripts\i18n\grid.locale-id.js" />
+    <Content Include="Scripts\i18n\grid.locale-is.js" />
+    <Content Include="Scripts\i18n\grid.locale-it.js" />
+    <Content Include="Scripts\i18n\grid.locale-ja.js" />
+    <Content Include="Scripts\i18n\grid.locale-kr.js" />
+    <Content Include="Scripts\i18n\grid.locale-lt.js" />
+    <Content Include="Scripts\i18n\grid.locale-mne.js" />
+    <Content Include="Scripts\i18n\grid.locale-nl.js" />
+    <Content Include="Scripts\i18n\grid.locale-no.js" />
+    <Content Include="Scripts\i18n\grid.locale-pl.js" />
+    <Content Include="Scripts\i18n\grid.locale-pt-br.js" />
+    <Content Include="Scripts\i18n\grid.locale-pt.js" />
+    <Content Include="Scripts\i18n\grid.locale-ro.js" />
+    <Content Include="Scripts\i18n\grid.locale-ru.js" />
+    <Content Include="Scripts\i18n\grid.locale-sk.js" />
+    <Content Include="Scripts\i18n\grid.locale-sr-latin.js" />
+    <Content Include="Scripts\i18n\grid.locale-sr.js" />
+    <Content Include="Scripts\i18n\grid.locale-sv.js" />
+    <Content Include="Scripts\i18n\grid.locale-th.js" />
+    <Content Include="Scripts\i18n\grid.locale-tr.js" />
+    <Content Include="Scripts\i18n\grid.locale-tw.js" />
+    <Content Include="Scripts\i18n\grid.locale-ua.js" />
+    <Content Include="Scripts\i18n\grid.locale-vi.js" />
+    <Content Include="Scripts\jquery-1.9.1-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.9.1.js" />
+    <Content Include="Scripts\jquery-1.9.1.min.js" />
+    <Content Include="Scripts\jquery-ui-1.10.3.js" />
+    <Content Include="Scripts\jquery-ui-1.10.3.min.js" />
+    <Content Include="Scripts\jquery.dialogextend.min.js" />
+    <Content Include="Scripts\jquery.jqGrid.js" />
+    <Content Include="Scripts\jquery.jqGrid.min.js" />
+    <Content Include="Scripts\jquery.js" />
+    <Content Include="Scripts\jquery.layout-latest.js" />
+    <Content Include="Scripts\jquery.session.js" />
+    <Content Include="Scripts\jquery.splitter-0.12.0.js" />
+    <Content Include="Scripts\jquery.ui.all.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jshashtable-3.0.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\files.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\index.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\ASN1HEX.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\Base64x.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\global__.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KEYUTIL.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.ASN1Object.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.ASN1Util.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.DERAbstractString.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.DERAbstractStructured.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.DERAbstractTime.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.DERBitString.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.DERBoolean.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.DERGeneralizedTime.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.DERIA5String.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.DERInteger.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.DERNull.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.DERNumericString.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.DERObjectIdentifier.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.DEROctetString.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.DERPrintableString.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.DERSequence.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.DERSet.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.DERTaggedObject.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.DERTeletexString.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.DERUTCTime.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.DERUTF8String.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.AlgorithmIdentifier.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.AttributeTypeAndValue.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.BasicConstraints.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.Certificate.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.CRL.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.CRLDistributionPoints.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.CRLEntry.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.DistributionPoint.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.DistributionPointName.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.Extension.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.ExtKeyUsage.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.GeneralName.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.GeneralNames.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.KeyUsage.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.OID.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.RDN.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.SubjectPublicKeyInfo.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.TBSCertificate.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.TBSCertList.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.Time.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.X500Name.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.asn1.x509.X509Util.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.crypto.DSA.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.crypto.ECDSA.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.crypto.ECParameterDB.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.crypto.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.crypto.Mac.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.crypto.MessageDigest.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.crypto.OID.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.crypto.Signature.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.crypto.Util.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\KJUR.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\PKCS5PKEY.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\RSAKey.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\src\asn1-1.0.js.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\src\asn1hex-1.1.js.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\src\asn1x509-1.0.js.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\src\base64x-1.1.js.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\src\crypto-1.1.js.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\src\dsa-modified-1.0.js.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\src\ecdsa-modified-1.0.js.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\src\ecparam-1.0.js.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\src\keyutil-1.0.js.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\src\pkcs5pkey-1.0.js.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\src\rsapem-1.1.js.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\src\rsasign-1.2.js.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\src\x509-1.1.js.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\api\symbols\X509.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\asn1-1.0.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\asn1-1.0.min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\asn1hex-1.1.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\asn1hex-1.1.min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\asn1x509-1.0.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\asn1x509-1.0.min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\base64x-1.1.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\base64x-1.1.min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ChangeLog.txt" />
+    <Content Include="Scripts\jsrsasign-4.2.1\crypto-1.0.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\crypto-1.0.min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\crypto-1.1.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\crypto-1.1.min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\dsa-modified-1.0.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\dsa-modified-1.0.min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ecdsa-modified-1.0.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ecdsa-modified-1.0.min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ecparam-1.0.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ecparam-1.0.min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\base64-min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\base64.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\cryptojs-312-core-fix-min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\cryptojs-312-core-fix.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\ec-min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\ec-patch-min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\ec-patch.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\ec.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\jsbn-min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\jsbn.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\jsbn2-min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\jsbn2.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\md5.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\prng4-min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\prng4.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\ripemd160.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\rng-min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\rng.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\rsa-min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\rsa.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\rsa2-min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\rsa2.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\sha1.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\sha256.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\sha512.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\THIRDPARTY_LICENSE.bitcoin.txt" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\THIRDPARTY_LICENSE.cryptojs.txt" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\THIRDPARTY_LICENSE.pgp.txt" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\THIRDPARTY_LICENSE.tomwu.txt" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\THIRDPARTY_LICENSE.txt" />
+    <Content Include="Scripts\jsrsasign-4.2.1\ext\THIRDPARTY_LICENSE.yui.txt" />
+    <Content Include="Scripts\jsrsasign-4.2.1\index.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\index_ut.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\jsrsasign-4.1.1-all-min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\jsrsasign-4.1.2-all-min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\jsrsasign-4.1.3-all-min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\jsrsasign-4.1.4-all-min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\jsrsasign-4.1.6-all-min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\jsrsasign-4.2.0-all-min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\jsrsasign-4.2.1-all-min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\jsrsasign-latest-all-min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\keyutil-1.0.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\keyutil-1.0.min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\LICENSE.txt" />
+    <Content Include="Scripts\jsrsasign-4.2.1\npm\lib\footer.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\npm\lib\header.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\npm\lib\jsrsasign.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\pkcs5pkey-1.0.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\pkcs5pkey-1.0.min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\rsapem-1.1.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\rsapem-1.1.min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\rsasign-1.2.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\rsasign-1.2.min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\sample-ecdsa.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\sample-rsasign.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\sample-rsasign.png" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\jquery-1.4.2.min.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-asn1-newobj.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-asn1.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-asn1hex.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-asn1x509-newcrt.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-asn1x509.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-base64x.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-crypto-ecdsa.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-crypto-mac.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-crypto-pss.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-crypto-sigini.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-crypto-siginidsa.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-crypto-sjcl.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-crypto.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-dsa.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-ecdsamod-s.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-ecdsamod.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-ecparam.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-keyutil-des.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-keyutil-dsa.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-keyutil-eprv.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-keyutil-gen.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-keyutil-getpem.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-keyutil-pub.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-keyutil.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-pkcs5-eprv.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-pkcs5-pub.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-pkcs5.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-rsapem.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-rsasign-pss.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-rsasign.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-x509-key.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit-do-x509.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit.css" />
+    <Content Include="Scripts\jsrsasign-4.2.1\test\qunit.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\tool_ca.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\tool_certview.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\tool_pkcs5view.html" />
+    <Content Include="Scripts\jsrsasign-4.2.1\x509-1.1.js" />
+    <Content Include="Scripts\jsrsasign-4.2.1\x509-1.1.min.js" />
+    <Content Include="Scripts\knockout-2.1.0.debug.js" />
+    <Content Include="Scripts\knockout-2.1.0.js" />
+    <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Scripts\multi-geocoder.js" />
+    <Content Include="Scripts\treeview\images\ajax-loader.gif" />
+    <Content Include="Scripts\treeview\images\file.gif" />
+    <Content Include="Scripts\treeview\images\folder-closed.gif" />
+    <Content Include="Scripts\treeview\images\folder.gif" />
+    <Content Include="Scripts\treeview\images\minus.gif" />
+    <Content Include="Scripts\treeview\images\plus.gif" />
+    <Content Include="Scripts\treeview\images\treeview-black-line.gif" />
+    <Content Include="Scripts\treeview\images\treeview-black.gif" />
+    <Content Include="Scripts\treeview\images\treeview-default-line.gif" />
+    <Content Include="Scripts\treeview\images\treeview-default.gif" />
+    <Content Include="Scripts\treeview\images\treeview-famfamfam-line.gif" />
+    <Content Include="Scripts\treeview\images\treeview-famfamfam.gif" />
+    <Content Include="Scripts\treeview\images\treeview-gray-line.gif" />
+    <Content Include="Scripts\treeview\images\treeview-gray.gif" />
+    <Content Include="Scripts\treeview\images\treeview-red-line.gif" />
+    <Content Include="Scripts\treeview\images\treeview-red.gif" />
+    <Content Include="Scripts\treeview\jquery.treeview.async.js" />
+    <Content Include="Scripts\treeview\jquery.treeview.css" />
+    <Content Include="Scripts\treeview\jquery.treeview.edit.js" />
+    <Content Include="Scripts\treeview\jquery.treeview.js" />
+    <Content Include="Scripts\treeview\jquery.treeview.sortable.js" />
+    <Content Include="Scripts\zhilfond\attachments.js" />
+    <Content Include="Scripts\zhilfond\check_signature.js" />
+    <Content Include="Scripts\zhilfond\audit.js" />
+    <Content Include="Scripts\zhilfond\genreports.js" />
+    <Content Include="Scripts\zhilfond\details_reports.js" />
+    <Content Include="Scripts\zhilfond\group_reports.js" />
+    <Content Include="Scripts\zhilfond\crypto.js" />
+    <Content Include="Scripts\zhilfond\details.js" />
+    <Content Include="Scripts\zhilfond\details_common.js" />
+    <Content Include="Scripts\zhilfond\group_operations.js" />
+    <Content Include="Scripts\zhilfond\import.js" />
+    <Content Include="Scripts\zhilfond\map.js" />
+    <Content Include="Scripts\zhilfond\messages.js" />
+    <Content Include="Scripts\zhilfond\reports.js" />
+    <Content Include="Scripts\zhilfond\xml.js" />
+    <Content Include="Scripts\zhilfond\xsd.js" />
+    <Content Include="Web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Site.css" />
+    <Content Include="Images\accent.png" />
+    <Content Include="Images\bullet.png" />
+    <Content Include="Images\heroAccent.png" />
+    <Content Include="Images\orderedList0.png" />
+    <Content Include="Images\orderedList1.png" />
+    <Content Include="Images\orderedList2.png" />
+    <Content Include="Images\orderedList3.png" />
+    <Content Include="Images\orderedList4.png" />
+    <Content Include="Images\orderedList5.png" />
+    <Content Include="Images\orderedList6.png" />
+    <Content Include="Images\orderedList7.png" />
+    <Content Include="Images\orderedList8.png" />
+    <Content Include="Images\orderedList9.png" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HttpMultipartParser\HttpMultipartParser.csproj">
+      <Project>{4691988a-ce66-40cb-afb4-2757255e03e0}</Project>
+      <Name>HttpMultipartParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zhilfond.DAL\Zhilfond.DAL.csproj">
+      <Project>{E45B456B-68DA-4EFF-8C84-FE12A636B63C}</Project>
+      <Name>Zhilfond.DAL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\spotlight.pubxml" />
+    <Content Include="Scripts\fileupload\.gitignore" />
+    <Content Include="Scripts\fileupload\.jshintrc" />
+    <Content Include="Scripts\fileupload\blueimp-file-upload.jquery.json" />
+    <Content Include="Scripts\fileupload\bower.json" />
+    <Content Include="Scripts\fileupload\CONTRIBUTING.md" />
+    <Content Include="Scripts\fileupload\package.json" />
+    <Content Include="Scripts\fileupload\README.md" />
+    <Content Include="Scripts\fileupload\server\gae-go\app.yaml" />
+    <Content Include="Scripts\fileupload\server\gae-go\app\main.go" />
+    <Content Include="Scripts\fileupload\server\gae-python\app.yaml" />
+    <Content Include="Scripts\fileupload\server\gae-python\main.py" />
+    <Content Include="Scripts\fileupload\server\node\.gitignore" />
+    <Content Include="Scripts\fileupload\server\node\package.json" />
+    <Content Include="Scripts\fileupload\server\node\public\files\.gitignore" />
+    <Content Include="Scripts\fileupload\server\node\public\files\thumbnail\.gitignore" />
+    <Content Include="Scripts\fileupload\server\node\tmp\.gitignore" />
+    <Content Include="Scripts\fileupload\server\php\files\.gitignore" />
+    <Content Include="Scripts\fileupload\server\php\files\.htaccess" />
+    <Content Include="Scripts\fileupload\server\php\index.php" />
+    <Content Include="Scripts\fileupload\server\php\UploadHandler.php" />
+    <None Include="Scripts\jquery-1.9.1.min.map" />
+    <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Users\ChangePassword.cshtml" />
+    <Content Include="Views\Main\Index.cshtml" />
+    <Content Include="Views\Main\Constructor.cshtml" />
+    <Content Include="Views\Main\Dicts.cshtml" />
+    <Content Include="Scripts\jsrsasign-4.2.1\npm\Makefile" />
+    <Content Include="Scripts\jsrsasign-4.2.1\npm\package.json" />
+    <Content Include="Scripts\jsrsasign-4.2.1\npm\README.md" />
+    <Content Include="Scripts\jsrsasign-4.2.1\README.md" />
+    <Content Include="Views\AccessDenied\Index.cshtml" />
+    <Content Include="Views\Main\Settings.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>False</AutoAssignPort>
+          <DevelopmentServerPort>7716</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:7716</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

@@ -1,0 +1,6 @@
+D:\Work\zhilfond\trunk\ver3\HttpMultipartParser\bin\Debug\HttpMultipartParser.XML
+D:\Work\zhilfond\trunk\ver3\HttpMultipartParser\bin\Debug\HttpMultipartParser.dll
+D:\Work\zhilfond\trunk\ver3\HttpMultipartParser\bin\Debug\HttpMultipartParser.pdb
+D:\Work\zhilfond\trunk\ver3\HttpMultipartParser\obj\Debug\HttpMultipartParser.csprojResolveAssemblyReference.cache
+D:\Work\zhilfond\trunk\ver3\HttpMultipartParser\obj\Debug\HttpMultipartParser.dll
+D:\Work\zhilfond\trunk\ver3\HttpMultipartParser\obj\Debug\HttpMultipartParser.pdb

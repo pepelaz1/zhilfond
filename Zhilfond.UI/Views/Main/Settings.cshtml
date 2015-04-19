@@ -1,0 +1,329 @@
+﻿@{
+    ViewBag.Title = "Жилфонд";
+}
+
+<div id="login_info">
+    <p>Текущий пользователь: <span></span></p>
+</div>
+<div id="title">
+    <h3>Настройки системы</h3>
+</div>
+<div id="total" class="div_total">
+    <table style="margin-top: 0.25em;">
+        <tr>
+            <td>
+                <h4>Шаблон подсказки на карте</h4>
+                <div>
+                    <textarea id="ta_baloon_template" style="padding-top: 0px; width: 500px; height: 70px; font-size: 0.9em"></textarea>
+                </div>
+                <div>
+                    <button id="btn_save_settings">Сохранить</button>
+                </div>
+                <p />
+            </td>
+        </tr>
+    </table>
+</div>
+<br />
+<div id="total2" class="div_total">
+    <h4>Шаблоны отчётов</h4>
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    <table id="grid_reporttemplates"></table>
+                    <div id="pager_reporttemplates"></div>
+                    <br />
+                    <form action="/api/reporttemplatesapi" method="post" enctype="multipart/form-data">
+                        <span style="font-size: 11px">Выберите файлы для добавления:</span>
+                        <input style="font-size: 11px" id="filereporttemplate" type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+                        <button style="font-size: 0.9em; color: black" id="btn_attachtmpl" type="button">Вложить</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div id="matches" class="div_total">
+        <h4>Возможные подстановки для Шаблонов отчётов</h4>
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    <table id="grid_matches"></table>
+                    <div id="pager_matches"></div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+@Styles.Render("~/Content/themes/base/css", "~/Content/css")
+
+<link href="~/Content/themes/custom/custom.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/jquery.jqGrid/ui.jqgrid.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/jquery.splitter.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/themes/base/jquery.ui.menu.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/themes/base/jquery.ui.accordion.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/themes/base/jquery.ui.button.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/themes/base/jquery.ui.datepicker.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/themes/base/jquery.ui.spinner.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/themes/base/jquery.ui.dialog.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="~/Scripts/fileupload/css/jquery.fileupload.css">
+<link rel="stylesheet" href="~/Scripts/fileupload/css/jquery.fileupload-ui.css">
+
+
+@section scripts {
+
+    <script>
+
+        $().ready(function () {
+
+            showTopMenu();
+            loadSettings();
+            $("#login_info p span").html(getUser($.cookie('token')));
+        });
+
+        function loadSettings() {
+            $.ajax({
+                type: 'GET',
+                async: true,
+                url: '/api/settingsapi/',
+                success: function (data) {
+                    //console.log(data);
+                    $('#ta_baloon_template').val(data.BaloonTemplate);
+                }
+            });
+        }
+
+        $('#btn_save_settings').button().click(function () {
+            var s = {};
+            s.BaloonTemplate = $('#ta_baloon_template').val();
+            $.ajax({
+                url: "/api/settingsapi/",
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify(s),
+                dataType: "json",
+                async: false,
+                success: function (response) {
+                },
+                error: function (x, e) {
+                    alert('failed');
+                }
+            });
+        });
+
+        $('#btn_attachtmpl').button().click(function () {
+            var files = $("#filereporttemplate").get(0).files;
+            //var files = $("#filereporttemplate")[0].files[0];
+            if (files) {
+                if (window.FormData !== undefined) {
+                    var data = new FormData();
+                    for (i = 0; i < files.length; i++) {
+                        data.append("file" + i, files[i]);
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/reporttemplatesapi",
+                        contentType: false,
+                        processData: false,
+                        data: data,
+                        success: function (results) {
+                            $("#grid_reporttemplates").trigger('reloadGrid');
+                        }, error: function (x, e) {
+                            alert('Ошибка вложения файлов');
+                        }
+                    });
+                } else {
+                    alert("This browser doesn't support HTML5 multiple file uploads!");
+                }
+            }
+            return false;
+        });
+
+        var api_reporttemplates = '/api/reporttemplatesapi/';
+
+        //----- grid_reporttemplates
+        $("#grid_reporttemplates").jqGrid({
+            url: api_reporttemplates,
+            datatype: 'json',
+            mtype: 'GET',
+            pager: '#pager_reporttemplates',
+            pagerpos: 'center',
+            sortable: false,
+            height: 150,
+            reloadAfterSubmit: true,
+            width: 1048,
+            shrinkToFit: false,
+            viewrecords: true,
+            rowNum: 10000,
+            colNames: ['ИД', 'Имя файла', 'Название отчёта', 'Тип отчёта'],
+            //colNames: ['ИД', 'Имя файла', 'Название отчёта', 'Тип отчёта', 'Файл'],
+            colModel: [{ name: 'Id', index: 'Id', editable: false, width: 40, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'Filename', index: 'Filename', editable: false, edittype: 'text', width: 300, editrules: { required: false }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'Reportname', index: 'Reportname', editable: true, edittype: 'text', width: 300, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+                       { name: 'Reporttype', index: 'Reporttype', editable: true, edittype: 'select', width: 300, editrules: { required: true }, searchoptions: { sopt: ['cn'] }, editoptions: { value: "1: для одного дома;2: групповой отчёт" }, formatter: 'select' }
+                       //,{ name: 'fileToUpload', index: 'Data', editable: true, edittype: 'file', width: 70, editrules: { required: true }, searchoptions: { sopt: ['cn'] }, editoptions: { enctype: "multipart/form-data" } }
+            ],
+            caption: '',
+            loadError: function (xhr, st, err) {
+                if (xhr.status == 401) {
+                    alert(xhr);
+                }
+            },
+            loadComplete: function () {
+            },
+            onSelectRow: function (ids) {
+            },
+            ondblClickRow: function (rowid, iRow, iCol, e) {
+                var row = $("#grid_reporttemplates").getRowData($("#grid_reporttemplates").getGridParam("selrow"));
+                if (row.Id != undefined)
+                    window.location = "/api/reporttemplatesapi/" + row.Id;
+            }
+        });
+
+
+
+        function updateDialog_reporttemplates(action) {
+            return {
+                url: api_reporttemplates
+                    , closeAfterAdd: true
+                    , closeAfterEdit: true
+                    , afterShowForm: function (formId) { }
+                    , modal: true
+                    , onclickSubmit: function (params) {
+                        var grid = $("#grid_reporttemplates");
+                        var selectedRow = grid.getGridParam("selrow");
+                        rowData = grid.getRowData(selectedRow);
+                        params.url += rowData.Id;
+                        params.url += "?token=" + $.cookie('token');
+                        params.mtype = action;
+                    }
+                    , width: "500"
+            };
+        }
+        
+        $("#grid_reporttemplates").jqGrid('navGrid', '#pager_reporttemplates',
+            { add: false, edit: true, del: true, refresh: true, search: false },            
+            updateDialog_reporttemplates('PUT'),
+            updateDialog_reporttemplates('DELETE'),
+            {
+                onReset: function () {
+                    var jqModal = true, gridid = grid[0].id;
+                    $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                   { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                },
+                onSearch: function () {
+                    var jqModal = true, gridid = grid[0].id;
+                    $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                }
+            }
+         );
+
+        $("#grid_reporttemplates").jqGrid('navGrid', '#pager_reporttemplates', {}, {}, {}, {},
+        {
+            onReset: function () {
+                var jqModal = true, gridid = grid[0].id;
+                $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                    { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+            }
+        });
+
+        $("#pager_reporttemplates").find("#pager_reporttemplates_center").hide();
+
+
+        // Matches grid
+        var api_matches = '/api/matchesapi/';
+
+        // region
+        $("#grid_matches").jqGrid({
+            url: api_matches,
+            datatype: 'json',
+            mtype: 'GET',
+            pager: '#pager_matches',
+            pagerpos: 'center',
+            sortable: false,
+            height: 200,
+            width: 1048,
+            viewrecords: true,
+            rowNum: 10000,
+            colNames: ['Название'],
+            colModel: [{ name: 'key', index: 'key', editable: false, edittype: 'text', width: 120, editrules: { required: true }, searchoptions: { sopt: ['cn'] } },
+            ],
+            caption: "Список подстановок",
+            onSelectRow: function (ids) {
+            },
+            //     autowidth: true,
+            loadError: function (xhr, st, err) {
+                if (xhr.status == 401) {
+                    //window.location.replace("/Home/Index");
+                    alert(xhr);
+                }
+            },
+            loadComplete: function (data) {
+            }
+        });
+
+        function updateDialog_matches(action) {
+            return {
+                url: api_matches
+                    , closeAfterAdd: true
+                    , closeAfterEdit: true
+                    , afterShowForm: function (formId) { }
+                    , modal: true
+                    , onclickSubmit: function (params) {
+                        var list = $("#grid_matches");
+                        var selectedRow = list.getGridParam("selrow");
+                        rowData = list.getRowData(selectedRow);
+                        params.url += rowData.Id;
+                        params.mtype = action;
+                    }
+                    , width: "500"
+            };
+        }
+
+        $("#grid_matches").jqGrid('navGrid', '#pager_matches',
+            { add: false, edit: false, del: false, refresh: true, search: true },
+             updateDialog_matches('PUT'),
+             updateDialog_matches('POST'),
+             updateDialog_matches('DELETE'),
+             {
+                 onReset: function () {
+                     var jqModal = true, gridid = grid[0].id;
+                     $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                    { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                 },
+                 onSearch: function () {
+                     var jqModal = true, gridid = grid[0].id;
+                     $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                 { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+                 }
+             }
+         );
+        $("#pager_matches").find("#pager_matches_center").hide();
+
+        $("#grid_matches").jqGrid('navGrid', '#pager_matches', {}, {}, {}, {},
+        {
+            onReset: function () {
+                var jqModal = true, gridid = grid[0].id;
+                $.jgrid.hideModal("#searchmodfbox_" + gridid,
+                    { gb: "#gbox_" + gridid, jqm: jqModal, onClose: null });
+            }
+        });
+
+    </script>
+
+    <style>
+        .ui-button-text {
+            margin-top: -3px;
+        }
+
+        .ui-button {
+            font-size: 0.9em;
+            height: 20px;
+        }
+    </style>
+
+}
